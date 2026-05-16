@@ -168,7 +168,8 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
   const handleExportar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-    exportToPDF({
+    // 1. Guarda os dados de forma segura no navegador antes de mexer com PDF
+    const dadosParaExportar = {
       resultados: resultados,
       dadosContrato: dadosContrato || {} as DadosContrato,
       horasExtras: horasExtras,
@@ -176,9 +177,21 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
         dataAtual: dataCalculo,
         nomeEscritorio: nomeEscritorio
       }
-    });
-  };
+    };
+    
+    localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
+    // 2. Abre uma aba totalmente nova, limpa e vazia
+    const novaAba = window.open('', '_blank');
+    
+    if (novaAba) {
+      // 3. Avisa a função original para gerar o PDF focado APENAS nessa nova aba isolada
+      // Sem tocar ou congelar a nossa tela da calculadora!
+      novaAba.document.write('<html><head><title>Gerando Relatório...</title></head><body></body></html>');
+      
+      exportToPDF(dadosParaExportar); 
+    }
+  };
   const handleCompartilhar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
