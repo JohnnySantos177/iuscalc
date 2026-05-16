@@ -1,3 +1,4 @@
+import { useEffect } from 'react'; // 👈 Adicionado useEffect para recuperar os dados
 import { useCalculadoraState } from '@/hooks/calculadora/useCalculadoraState';
 import { useCalculos } from '@/hooks/calculadora/useCalculos';
 import { useCalculosSalvos, CalculoSalvo } from '@/hooks/useCalculosSalvos';
@@ -20,6 +21,19 @@ export function CalculadoraPage() {
     renomearCalculo, 
     carregarCalculo 
   } = useCalculosSalvos();
+
+  // 🛡️ TRAVA ANTICRASH: Se o Lovable resetar a página, recupera os dados na hora!
+  useEffect(() => {
+    const dadosSalvosTemporarios = localStorage.getItem('iuscalc_active_state');
+    if (dadosSalvosTemporarios && !state.resultados) {
+      try {
+        const parsedState = JSON.parse(dadosSalvosTemporarios);
+        updateState(parsedState);
+      } catch (e) {
+        console.error('Erro ao restaurar estado pós-impressão:', e);
+      }
+    }
+  }, []);
 
   const handleCalcular = () => {
     try {
@@ -49,8 +63,12 @@ export function CalculadoraPage() {
       };
       
       const resultados = calcular(stateCopy);
-      updateState({ resultados });
       
+      // Salva o estado completo no cache antes de aplicar na tela
+      const finalState = { ...stateCopy, resultados };
+      localStorage.setItem('iuscalc_active_state', JSON.stringify(finalState));
+      
+      updateState({ resultados });
       toast.success('Cálculo realizado com sucesso!');
       
     } catch (error) {
@@ -86,7 +104,7 @@ export function CalculadoraPage() {
   };
 
   const handleEditarCalculo = (calculo: CalculoSalvo) => {
-    updateState({
+    const newState = {
       dadosContrato: calculo.dadosContrato,
       adicionais: calculo.adicionais,
       verbas: calculo.verbas,
@@ -94,7 +112,11 @@ export function CalculadoraPage() {
       salarioFamilia: calculo.salarioFamilia,
       seguroDesemprego: calculo.seguroDesemprego,
       resultados: calculo.resultados
-    });
+    };
+    
+    // Alimenta o cache temporário também na edição
+    localStorage.setItem('iuscalc_active_state', JSON.stringify(newState));
+    updateState(newState);
     
     toast.success('Cálculo carregado para edição!');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -152,28 +174,45 @@ export function CalculadoraPage() {
                     break;
                 }
                 
+                const updatedDadosContrato = {
+                  ...state.dadosContrato,
+                  ...dadosContratoUpdates
+                };
+
+                // Atualiza o cache a cada mudança para evitar perdas
+                localStorage.setItem('iuscalc_active_state', JSON.stringify({ ...state, dadosContrato: updatedDadosContrato }));
+
                 updateState({
-                  dadosContrato: {
-                    ...state.dadosContrato,
-                    ...dadosContratoUpdates
-                  }
+                  dadosContrato: updatedDadosContrato
                 });
               }}
             />
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow">
-            <AdicionaisBasicos state={state} updateState={updateState} />
+            <AdicionaisBasicos state={state} updateState={(updates) => {
+              const newState = { ...state, ...updates };
+              localStorage.setItem('iuscalc_active_state', JSON.stringify(newState));
+              updateState(updates);
+            }} />
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow">
-            <VerbasAdicionais state={state} updateState={updateState} />
+            <VerbasAdicionais state={state} updateState={(updates) => {
+              const newState = { ...state, ...updates };
+              localStorage.setItem('iuscalc_active_state', JSON.stringify(newState));
+              updateState(updates);
+            }} />
           </div>
         </div>
 
         <div className="space-y-8">
           <div className="bg-white p-6 rounded-lg shadow">
-            <MultasOutrosAdicionais state={state} updateState={updateState} />
+            <MultasOutrosAdicionais state={state} updateState={(updates) => {
+              const newState = { ...state, ...updates };
+              localStorage.setItem('iuscalc_active_state', JSON.stringify(newState));
+              updateState(updates);
+            }} />
           </div>
 
           <div className="bg-white p-6 rounded-lg shadow">
