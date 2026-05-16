@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CalculadoraState, DadosContrato, Adicionais, Verbas, Multas, SalarioFamilia, SeguroDesemprego, CustomCalculo } from '@/types/calculadora';
+import { CalculadoraState, DadosContrato } from '@/types/calculadora';
 
 const estadoInicial: CalculadoraState = {
   dadosContrato: {
@@ -184,37 +184,38 @@ const estadoInicial: CalculadoraState = {
 };
 
 export function useCalculadoraState() {
-  const [state, setState] = useState<CalculadoraState>(estadoInicial);
+  // 🛡️ TRAVA SUPREMA: O Estado já nasce buscando o cache salvo. Se o app der reload, não perde nada!
+  const [state, setState] = useState<CalculadoraState>(() => {
+    const localData = localStorage.getItem('iuscalc_active_state');
+    if (localData) {
+      try {
+        return JSON.parse(localData);
+      } catch (e) {
+        console.error('Erro ao ler iuscalc_active_state:', e);
+        return estadoInicial;
+      }
+    }
+    return estadoInicial;
+  });
+
+  // Salva no localStorage em tempo real sempre que qualquer dado mudar
+  useEffect(() => {
+    localStorage.setItem('iuscalc_active_state', JSON.stringify(state));
+  }, [state]);
 
   // Função para calcular os dias trabalhados no último mês
   const calcularDiasTrabalhados = (dataAdmissao: string, dataDemissao: string) => {
     if (!dataAdmissao || !dataDemissao) return 0;
     
-    // Corrigir criação das datas para evitar problemas de fuso horário
     const [aYear, aMonth, aDay] = dataAdmissao.split('-').map(Number);
     const [dYear, dMonth, dDay] = dataDemissao.split('-').map(Number);
     const admissao = new Date(aYear, aMonth - 1, aDay);
     const demissao = new Date(dYear, dMonth - 1, dDay);
-    console.log('[DEBUG] calcularDiasTrabalhados:', {
-      dataAdmissao,
-      dataDemissao,
-      admissao,
-      demissao,
-      admissaoDay: admissao.getDate(),
-      admissaoMonth: admissao.getMonth(),
-      admissaoYear: admissao.getFullYear(),
-      demissaoDay: demissao.getDate(),
-      demissaoMonth: demissao.getMonth(),
-      demissaoYear: demissao.getFullYear()
-    });
     
     if (admissao.getMonth() === demissao.getMonth() && 
         admissao.getFullYear() === demissao.getFullYear()) {
-      const dias = demissao.getDate() - admissao.getDate() + 1;
-      console.log('[DEBUG] Mesmo mês:', { dias });
-      return dias;
+      return demissao.getDate() - admissao.getDate() + 1;
     }
-    console.log('[DEBUG] Meses diferentes:', { dias: demissao.getDate() });
     return demissao.getDate();
   };
 
@@ -230,7 +231,6 @@ export function useCalculadoraState() {
     
     let totalMeses = anos * 12 + meses;
     
-    // Ajuste para dias do mês
     if (demissao.getDate() < admissao.getDate()) {
       totalMeses--;
     }
@@ -255,14 +255,12 @@ export function useCalculadoraState() {
         }
       }));
     }
-  }, [state.dadosContrato]);
+  }, [state.dadosContrato.dataAdmissao, state.dadosContrato.dataDemissao]);
 
   const updateState = (updates: Partial<CalculadoraState>) => {
     setState(prevState => {
-      // Criar uma cópia profunda do estado atual
       const newState = JSON.parse(JSON.stringify(prevState));
 
-      // Atualizar cada seção do estado se fornecida
       if (updates.dadosContrato) {
         newState.dadosContrato = {
           ...newState.dadosContrato,
@@ -271,7 +269,6 @@ export function useCalculadoraState() {
       }
 
       if (updates.adicionais) {
-        // Preservar a estrutura aninhada dos adicionais
         newState.adicionais = {
           ...newState.adicionais,
           ...updates.adicionais
@@ -302,6 +299,7 @@ export function useCalculadoraState() {
   };
 
   const resetState = () => {
+    localStorage.removeItem('iuscalc_active_state');
     setState(estadoInicial);
   };
 
