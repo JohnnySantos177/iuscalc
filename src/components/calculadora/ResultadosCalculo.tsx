@@ -164,7 +164,7 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
     { label: 'Cálculos Personalizados', value: detalhamento.calculosPersonalizados || 0, icon: <Calculator className="w-4 h-4" /> }
   ].filter(item => item.value > 0);
 
-  const handleExportar = () => {
+ const handleExportar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
     const dadosParaExportar = {
@@ -186,15 +186,19 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
       
       exportToPDF(dadosParaExportar); 
 
+      // 🛡️ REDIRECIONAMENTO SEGURO: Monitora o fechamento da aba de impressão
       const checarAbaFechada = setInterval(() => {
         if (novaAba.closed) {
           clearInterval(checarAbaFechada);
-          window.location.reload();
+          
+          // Em vez de dar F5 na rota quebrada, força o navegador a ir para a raiz do app.
+          // Isso limpa o erro 404 e faz o hook carregar seus dados salvos na tela na hora!
+          window.location.href = window.location.origin; 
         }
       }, 1000);
     }
   };
-
+  
   const handleCompartilhar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
