@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Resultados, DadosContrato } from '@/types/calculadora';
 import { exportToPDF } from '@/utils/export/pdfExport';
@@ -168,7 +167,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
   const handleExportar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-    // 1. Guarda os dados de forma segura no navegador antes de mexer com PDF
     const dadosParaExportar = {
       resultados: resultados,
       dadosContrato: dadosContrato || {} as DadosContrato,
@@ -181,17 +179,22 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
     
     localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
-    // 2. Abre uma aba totalmente nova, limpa e vazia
     const novaAba = window.open('', '_blank');
     
     if (novaAba) {
-      // 3. Avisa a função original para gerar o PDF focado APENAS nessa nova aba isolada
-      // Sem tocar ou congelar a nossa tela da calculadora!
       novaAba.document.write('<html><head><title>Gerando Relatório...</title></head><body></body></html>');
       
       exportToPDF(dadosParaExportar); 
+
+      const checarAbaFechada = setInterval(() => {
+        if (novaAba.closed) {
+          clearInterval(checarAbaFechada);
+          window.location.reload();
+        }
+      }, 1000);
     }
   };
+
   const handleCompartilhar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
@@ -208,7 +211,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
     }
   };
 
-  // Componente para renderizar itens com descrição
   const renderItemWithDescription = (item: any, index: number, bgColor: string) => (
     <div key={index} className={`${bgColor} p-4 rounded-lg shadow-sm border-l-4 border-blue-500`}>
       <div className="flex justify-between items-start mb-2">
@@ -243,15 +245,12 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
       </CardHeader>
       <CardContent className="p-6">
         <div className="space-y-8">
-          {/* Total Value Card */}
           <div className="bg-gradient-to-r from-green-600 to-green-700 rounded-lg p-6 text-white shadow-lg">
             <div className="text-sm uppercase tracking-wide mb-2 opacity-90">Valor Total da Reclamação</div>
             <div className="text-4xl font-bold">{formatCurrency(total)}</div>
           </div>
 
-          {/* Sections */}
           <div className="grid gap-6">
-            {/* Verbas Rescisórias Principais */}
             {verbasRescisoriasItems.length > 0 && (
               <div className="bg-blue-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-blue-800">
@@ -266,7 +265,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               </div>
             )}
 
-            {/* Valores do Aviso Prévio Indenizado */}
             {avisoPrevioItems.length > 0 && (
               <div className="bg-purple-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-purple-800">
@@ -281,7 +279,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               </div>
             )}
 
-            {/* FGTS e Multa */}
             {fgtsItems.length > 0 && (
               <div className="bg-green-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-green-800">
@@ -296,7 +293,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               </div>
             )}
 
-            {/* Adicionais */}
             {adicionaisItems.length > 0 && (
               <div className="bg-indigo-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-indigo-800">
@@ -323,7 +319,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               </div>
             )}
 
-            {/* Verbas e Benefícios */}
             {verbasBeneficiosItems.length > 0 && (
               <div className="bg-green-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-green-800">
@@ -338,7 +333,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               </div>
             )}
 
-            {/* Multas */}
             {multasItems.length > 0 && (
               <CalculationSection
                 title="Multas"
@@ -348,7 +342,6 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
               />
             )}
 
-            {/* Outros Valores */}
             {outrosItems.length > 0 && (
               <CalculationSection
                 title="Outros Valores"
