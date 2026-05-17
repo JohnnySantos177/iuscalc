@@ -7,7 +7,12 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  // Aguarda a verificação de sessão antes de redirecionar
+  if (loading) {
+    return null;
+  }
 
   if (!user) {
     return <Navigate to="/auth" replace />;

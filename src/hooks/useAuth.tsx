@@ -41,9 +41,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         if (session?.user) {
           console.log('Usuário autenticado detectado, buscando perfil...');
           
-          // Navigate immediately for login events to avoid blocking
-          if (event === 'SIGNED_IN') {
-            console.log('Login detectado, redirecionando imediatamente para /home...');
+          // Só redireciona para /home se estiver em página pública (login, cadastro, landing)
+          const paginasPublicas = ['/', '/auth', '/cadastro', '/index'];
+          if (event === 'SIGNED_IN' && paginasPublicas.includes(window.location.pathname)) {
+            console.log('Login detectado em página pública, redirecionando para /home...');
             navigate('/home');
           }
           
