@@ -178,20 +178,11 @@ const handleExportar = () => {
         }
       };
       
+      // 1. Apenas guarda o payload puro do PDF
       localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
-      // Executa o seu motor original do PDF que já funciona perfeitamente
+      // 2. Executa a função nativa do seu projeto
       exportToPDF(dadosParaExportar);
-
-      // 🛡️ SEGUIDOR DE FOCO: Assim que a janela voltar a ter atenção do usuário,
-      // força o histórico do navegador a se reafirmar na rota da calculadora.
-      const garantirRotaPosImpressao = () => {
-        if (window.location.pathname !== '/calculadora') {
-          window.history.replaceState(null, '', '/calculadora');
-        }
-        window.removeEventListener('focus', garantirRotaPosImpressao);
-      };
-      window.addEventListener('focus', garantirRotaPosImpressao);
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
@@ -202,15 +193,7 @@ const handleExportar = () => {
     try {
       const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-      // 🛡️ SEGUIDOR DE FOCO: Aplica a mesma proteção para o menu de compartilhamento
-      const garantirRotaPosCompartilhar = () => {
-        if (window.location.pathname !== '/calculadora') {
-          window.history.replaceState(null, '', '/calculadora');
-        }
-        window.removeEventListener('focus', garantirRotaPosCompartilhar);
-      };
-      window.addEventListener('focus', garantirRotaPosCompartilhar);
-
+      // Executa o compartilhamento original do Lovable que interage com o navegador
       if (navigator.share) {
         navigator.share({
           title: 'Cálculo Trabalhista - IusCalc',
