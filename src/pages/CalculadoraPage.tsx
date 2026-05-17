@@ -104,8 +104,39 @@ export function CalculadoraPage() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const contractFormProps = {
+    data: {
+      daysWorked: parseInt(state.dadosContrato.diasTrabalhados) || 0,
+      monthsWorked: parseInt(state.dadosContrato.mesesTrabalhados) || 0,
+      fixedTermContract: state.dadosContrato.contratoTempoDeterminado || false,
+      noticePeriodFulfilled: state.dadosContrato.avisoPrevioCumprido || false,
+      fgtsDeposited: state.dadosContrato.fgtsDepositado || false,
+      admissionDate: state.dadosContrato.dataAdmissao,
+      terminationDate: state.dadosContrato.dataDemissao,
+      baseSalary: state.dadosContrato.salarioBase,
+      terminationType: (state.dadosContrato.motivoDemissao || '') as any,
+    },
+    onUpdate: (field: any, value: any) => {
+      const dadosContratoUpdates: Partial<DadosContrato> = {};
+      switch (field) {
+        case 'daysWorked':       dadosContratoUpdates.diasTrabalhados = String(value); break;
+        case 'monthsWorked':     dadosContratoUpdates.mesesTrabalhados = String(value); break;
+        case 'fixedTermContract':dadosContratoUpdates.contratoTempoDeterminado = value as boolean; break;
+        case 'noticePeriodFulfilled': dadosContratoUpdates.avisoPrevioCumprido = value as boolean; break;
+        case 'fgtsDeposited':    dadosContratoUpdates.fgtsDepositado = value as boolean; break;
+        case 'admissionDate':    dadosContratoUpdates.dataAdmissao = value as string; break;
+        case 'terminationDate':  dadosContratoUpdates.dataDemissao = value as string; break;
+        case 'baseSalary':       dadosContratoUpdates.salarioBase = Number(value) || 0; break;
+        case 'terminationType':  dadosContratoUpdates.motivoDemissao = value as string; break;
+      }
+      updateState({ dadosContrato: { ...state.dadosContrato, ...dadosContratoUpdates } });
+    },
+  };
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-w-7xl">
+
+      {/* Cabeçalho */}
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold">Calculadora Trabalhista</h1>
         <button
@@ -117,102 +148,56 @@ export function CalculadoraPage() {
           Limpar dados
         </button>
       </div>
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <ContractDataForm 
-              data={{
-                daysWorked: parseInt(state.dadosContrato.diasTrabalhados) || 0,
-                monthsWorked: parseInt(state.dadosContrato.mesesTrabalhados) || 0,
-                fixedTermContract: state.dadosContrato.contratoTempoDeterminado || false,
-                noticePeriodFulfilled: state.dadosContrato.avisoPrevioCumprido || false,
-                fgtsDeposited: state.dadosContrato.fgtsDepositado || false,
-                admissionDate: state.dadosContrato.dataAdmissao,
-                terminationDate: state.dadosContrato.dataDemissao,
-                baseSalary: state.dadosContrato.salarioBase,
-                terminationType: (state.dadosContrato.motivoDemissao || '') as any
-              }}
-              onUpdate={(field, value) => {
-                const dadosContratoUpdates: Partial<DadosContrato> = {};
-                
-                switch (field) {
-                  case 'daysWorked':
-                    dadosContratoUpdates.diasTrabalhados = String(value);
-                    break;
-                  case 'monthsWorked':
-                    dadosContratoUpdates.mesesTrabalhados = String(value);
-                    break;
-                  case 'fixedTermContract':
-                    dadosContratoUpdates.contratoTempoDeterminado = value as boolean;
-                    break;
-                  case 'noticePeriodFulfilled':
-                    dadosContratoUpdates.avisoPrevioCumprido = value as boolean;
-                    break;
-                  case 'fgtsDeposited':
-                    dadosContratoUpdates.fgtsDepositado = value as boolean;
-                    break;
-                  case 'admissionDate':
-                    dadosContratoUpdates.dataAdmissao = value as string;
-                    break;
-                  case 'terminationDate':
-                    dadosContratoUpdates.dataDemissao = value as string;
-                    break;
-                  case 'baseSalary':
-                    dadosContratoUpdates.salarioBase = Number(value) || 0;
-                    break;
-                  case 'terminationType':
-                    dadosContratoUpdates.motivoDemissao = value as string;
-                    break;
-                }
-                
-                updateState({
-                  dadosContrato: {
-                    ...state.dadosContrato,
-                    ...dadosContratoUpdates
-                  }
-                });
-              }}
-            />
-          </div>
 
+      {/* Formulários — duas colunas equilibradas */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        {/* Coluna esquerda: dados do contrato + adicionais básicos */}
+        <div className="space-y-6">
+          <div className="bg-white p-6 rounded-lg shadow">
+            <ContractDataForm {...contractFormProps} />
+          </div>
           <div className="bg-white p-6 rounded-lg shadow">
             <AdicionaisBasicos state={state} updateState={updateState} />
           </div>
+        </div>
 
+        {/* Coluna direita: verbas + multas */}
+        <div className="space-y-6">
           <div className="bg-white p-6 rounded-lg shadow">
             <VerbasAdicionais state={state} updateState={updateState} />
           </div>
-        </div>
-
-        <div className="space-y-8">
           <div className="bg-white p-6 rounded-lg shadow">
             <MultasOutrosAdicionais state={state} updateState={updateState} />
           </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <button
-              className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold"
-              onClick={handleCalcular}
-            >
-              Calcular
-            </button>
-          </div>
-
-          {state.resultados && (
-            <div className="bg-white p-6 rounded-lg shadow sticky top-4">
-              <ResultadosCalculo 
-                resultados={state.resultados} 
-                horasExtras={state.adicionais.horasExtras}
-                dadosContrato={state.dadosContrato}
-                onSalvar={handleSalvarCalculo}
-              />
-            </div>
-          )}
         </div>
       </div>
 
-      <div className="mt-8">
+      {/* Botão Calcular — largura total */}
+      <div className="mt-6">
+        <button
+          type="button"
+          className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors font-semibold text-base"
+          onClick={handleCalcular}
+        >
+          Calcular
+        </button>
+      </div>
+
+      {/* Resultados — largura total, aparece abaixo do botão */}
+      {state.resultados && (
+        <div className="mt-6">
+          <ResultadosCalculo
+            resultados={state.resultados}
+            horasExtras={state.adicionais.horasExtras}
+            dadosContrato={state.dadosContrato}
+            onSalvar={handleSalvarCalculo}
+          />
+        </div>
+      )}
+
+      {/* Cálculos salvos */}
+      <div className="mt-6">
         <SavedCalculations
           calculos={calculosSalvos}
           onDelete={removerCalculo}
@@ -220,6 +205,7 @@ export function CalculadoraPage() {
           onRename={renomearCalculo}
         />
       </div>
+
     </div>
   );
 }
