@@ -97,7 +97,7 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
               <Label>Último Salário (R$)</Label>
               <Input
                 type="number"
-                value={state.seguroDesemprego.ultimoSalario}
+                value={state.seguroDesemprego.ultimoSalario || ''}
                 onChange={(e) => updateState({
                   seguroDesemprego: {
                     ...state.seguroDesemprego,
@@ -110,7 +110,7 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
               <Label>Meses Trabalhados</Label>
               <Input
                 type="number"
-                value={state.seguroDesemprego.mesesTrabalhados}
+                value={state.seguroDesemprego.mesesTrabalhados || ''}
                 onChange={(e) => updateState({
                   seguroDesemprego: {
                     ...state.seguroDesemprego,
@@ -144,7 +144,7 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
             <Label>Quantidade de Filhos</Label>
             <Input
               type="number"
-              value={state.salarioFamilia.quantidadeFilhos}
+              value={state.salarioFamilia.quantidadeFilhos || ''}
               onChange={(e) => updateState({
                 salarioFamilia: {
                   ...state.salarioFamilia,
@@ -199,7 +199,7 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
                   <Label>Valor (R$)</Label>
                   <Input
                     type="number"
-                    value={calculo.valor}
+                    value={calculo.valor || ''}
                     onChange={(e) => {
                       const newCalculos = [...state.adicionais.calculosCustom.itens];
                       newCalculos[index].valor = parseFloat(e.target.value) || 0;

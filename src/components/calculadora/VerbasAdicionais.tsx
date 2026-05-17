@@ -38,7 +38,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
             <Label>Períodos de Férias Vencidas</Label>
             <Input
               type="number"
-              value={state.verbas.feriasVencidas.periodos}
+              value={state.verbas.feriasVencidas.periodos || ''}
               onChange={(e) => updateState({
                 verbas: {
                   ...state.verbas,
@@ -75,7 +75,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
             <Input
               type="number"
               placeholder="Valor da indenização (padrão: salário base)"
-              value={state.verbas.indenizacaoDemissaoIndevida.valor}
+              value={state.verbas.indenizacaoDemissaoIndevida.valor || ''}
               onChange={(e) => updateState({
                 verbas: {
                   ...state.verbas,
@@ -112,7 +112,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Valor Mensal (R$)</Label>
               <Input
                 type="number"
-                value={state.verbas.valeTransporteNaoPago.valor}
+                value={state.verbas.valeTransporteNaoPago.valor || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -128,7 +128,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Quantidade de Meses</Label>
               <Input
                 type="number"
-                value={state.verbas.valeTransporteNaoPago.meses}
+                value={state.verbas.valeTransporteNaoPago.meses || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -166,7 +166,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Valor Mensal (R$)</Label>
               <Input
                 type="number"
-                value={state.verbas.valeAlimentacaoNaoPago.valor}
+                value={state.verbas.valeAlimentacaoNaoPago.valor || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -182,7 +182,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Quantidade de Meses</Label>
               <Input
                 type="number"
-                value={state.verbas.valeAlimentacaoNaoPago.meses}
+                value={state.verbas.valeAlimentacaoNaoPago.meses || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -220,7 +220,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Percentual (%)</Label>
               <Input
                 type="number"
-                value={state.verbas.adicionalTransferencia.percentual}
+                value={state.verbas.adicionalTransferencia.percentual || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -236,7 +236,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Quantidade de Meses</Label>
               <Input
                 type="number"
-                value={state.verbas.adicionalTransferencia.meses}
+                value={state.verbas.adicionalTransferencia.meses || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -274,7 +274,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Valor Total dos Descontos (R$)</Label>
               <Input
                 type="number"
-                value={state.verbas.descontosIndevidos.valor}
+                value={state.verbas.descontosIndevidos.valor || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -328,7 +328,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Valor da Diferença Mensal (R$)</Label>
               <Input
                 type="number"
-                value={state.verbas.diferencasSalariais.valorDiferenca}
+                value={state.verbas.diferencasSalariais.valorDiferenca || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,
@@ -344,7 +344,7 @@ export function VerbasAdicionais({ state, updateState }: VerbasAdicionaisProps) 
               <Label>Quantidade de Meses</Label>
               <Input
                 type="number"
-                value={state.verbas.diferencasSalariais.meses}
+                value={state.verbas.diferencasSalariais.meses || ''}
                 onChange={(e) => updateState({
                   verbas: {
                     ...state.verbas,

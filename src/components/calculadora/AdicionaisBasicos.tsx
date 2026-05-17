@@ -326,14 +326,14 @@ export function AdicionaisBasicos({ state, updateState }: AdicionaisBasicosProps
                 <Input
                   id={`percentualHoraExtra-${horaExtra.id}`}
                   type="number"
-                  value={horaExtra.percentual}
+                  value={horaExtra.percentual || ''}
                   onChange={(e) => atualizarHoraExtra(horaExtra.id, { percentual: parseFloat(e.target.value) || 0 })}
                 />
                 <Label htmlFor={`quantidadeHoraExtra-${horaExtra.id}`}>Quantidade de Horas</Label>
                 <Input
                   id={`quantidadeHoraExtra-${horaExtra.id}`}
                   type="number"
-                  value={horaExtra.quantidade}
+                  value={horaExtra.quantidade || ''}
                   onChange={(e) => atualizarHoraExtra(horaExtra.id, { quantidade: parseFloat(e.target.value) || 0 })}
                 />
               </div>
