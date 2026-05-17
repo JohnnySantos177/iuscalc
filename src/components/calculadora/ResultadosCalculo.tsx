@@ -178,21 +178,16 @@ const handleExportar = () => {
         }
       };
       
-      // 1. Salva o dado específico do PDF no cache
+      // 1. Armazena com segurança os dados específicos do relatório
       localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
-      // 2. Dispara a abertura do PDF de forma isolada em background
+      // 2. Dispara a abertura do PDF de forma isolada e assíncrona
       setTimeout(() => {
         exportToPDF(dadosParaExportar);
       }, 50);
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
-    }
-  };
-
-    } catch (error) {
-      console.error('Erro ao preparar exportação:', error);
     }
   };
 
