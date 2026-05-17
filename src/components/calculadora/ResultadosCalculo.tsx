@@ -178,32 +178,13 @@ const handleExportar = () => {
         }
       };
       
-      // 1. Grava com segurança absoluta o estado atual no cache do navegador
+      // 1. Salva o dado específico do PDF no cache
       localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
-      localStorage.setItem('iuscalc_active_state', JSON.stringify({
-        dadosContrato,
-        adicionais: horasExtras,
-        resultados
-      }));
 
-      // 2. Cria a nova aba isolada para o relatório
-      const novaAba = window.open('', '_blank');
-      if (novaAba) {
-        novaAba.document.write('<html><head><title>Processando PDF...</title></head><body></body></html>');
-        
-        // Executa o motor original do PDF
+      // 2. Dispara a abertura do PDF de forma isolada em background
+      setTimeout(() => {
         exportToPDF(dadosParaExportar);
-
-        // 🛡️ O SEGREDO: Quando fechar o PDF, força o navegador a recarregar a rota raiz limpa.
-        // Como o cache do localStorage já está salvo, o seu hook useCalculadoraState
-        // vai ler os dados no milésimo de segundo seguinte e fixar tudo na tela automaticamente!
-        const checarFechamento = setInterval(() => {
-          if (novaAba.closed) {
-            clearInterval(checarFechamento);
-            window.location.href = window.location.origin + '/'; // Garante o caminho base limpo sem 404 e sem chutar para /home
-          }
-        }, 1000);
-      }
+      }, 50);
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
