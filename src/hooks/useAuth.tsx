@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User as SupabaseUser, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
@@ -24,27 +24,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  // Rastreia se o usuário JÁ estava autenticado antes do evento atual
+  // Evita redirecionamento em renovações de token (tab focus, refresh automático)
+  const jaAutenticado = useRef(false);
 
   useEffect(() => {
     console.log('Inicializando AuthProvider...');
-    
+
     let mounted = true;
-    
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
-        
+
         console.log('Auth state changed:', event, session?.user?.email || 'no user');
         setSession(session);
-        
+
         if (session?.user) {
           console.log('Usuário autenticado detectado, buscando perfil...');
-          
-          // Só redireciona para /home se estiver em página pública (login, cadastro, landing)
+
+          // Só redireciona se for um login NOVO (usuário não estava autenticado antes)
+          // Isso evita o redirecionamento ao renovar o token ao trocar de aba
+          const eraDeslogado = !jaAutenticado.current;
+          jaAutenticado.current = true;
+
           const paginasPublicas = ['/', '/auth', '/cadastro', '/index'];
-          if (event === 'SIGNED_IN' && paginasPublicas.includes(window.location.pathname)) {
-            console.log('Login detectado em página pública, redirecionando para /home...');
+          if (event === 'SIGNED_IN' && eraDeslogado && paginasPublicas.includes(window.location.pathname)) {
+            console.log('Login novo detectado, redirecionando para /home...');
             navigate('/home');
           }
           
@@ -125,6 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }, 100);
         } else {
           console.log('Nenhum usuário autenticado');
+          jaAutenticado.current = false;
           setUser(null);
           if (mounted) {
             setLoading(false);
