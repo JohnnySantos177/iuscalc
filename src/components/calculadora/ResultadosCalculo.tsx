@@ -193,12 +193,12 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
           
           // Em vez de dar F5 na rota quebrada, força o navegador a ir para a raiz do app.
           // Isso limpa o erro 404 e faz o hook carregar seus dados salvos na tela na hora!
-          window.location.href = window.location.origin; 
+          window.location.href = `${window.location.origin}/calculadora`; 
         }
       }, 1000);
     }
   };
-  
+
   const handleCompartilhar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
