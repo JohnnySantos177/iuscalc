@@ -2,7 +2,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Calculator, User, LogOut, Crown } from 'lucide-react';
+import { Calculator, User, LogOut, Crown, BarChart2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
 export const Navigation = () => {
@@ -14,6 +14,7 @@ export const Navigation = () => {
   const navItems = [
     { path: '/home', label: 'Home', icon: User },
     { path: '/calculadora', label: 'Calculadora', icon: Calculator },
+    { path: '/relatorios', label: 'Relatórios', icon: BarChart2 },
     { path: '/minha-conta', label: 'Minha Conta', icon: User },
   ];
 

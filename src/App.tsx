@@ -11,6 +11,7 @@ import { HomePage } from "@/pages/HomePage";
 import { CalculadoraPage } from "@/pages/CalculadoraPage";
 import { MinhaContaPage } from "@/pages/MinhaContaPage";
 import { SuperAdminPanel } from "@/pages/SuperAdminPanel";
+import { RelatoriosPage } from "@/pages/RelatoriosPage";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -62,6 +63,15 @@ const App = () => (
                 <MinhaContaPage />
               </ProtectedRoute>
             } 
+          />
+          <Route
+            path="/relatorios"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <RelatoriosPage />
+              </ProtectedRoute>
+            }
           />
           <Route path="/index" element={<Index />} />
           <Route path="*" element={<NotFound />} />

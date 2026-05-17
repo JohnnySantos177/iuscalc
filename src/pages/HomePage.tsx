@@ -145,8 +145,8 @@ export function HomePage() {
                     Meus Cálculos ({totalCalculos})
                   </Link>
                 </Button>
-<Button asChild variant="outline" className="w-full justify-start">
-                  <Link to="/calculadora">
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/relatorios">
                     <TrendingUp className="w-4 h-4 mr-2" />
                     Relatórios
                   </Link>
