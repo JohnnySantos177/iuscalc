@@ -178,15 +178,11 @@ const handleExportar = () => {
         }
       };
       
-      // 1. Armazena os dados com segurança no cache estável
+      // 1. Salva o dado no cache
       localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
-      // 2. 🛡️ ISOLAMENTO COMPLETO: Executa o PDF em background.
-      // O setTimeout desvincula a linha de execução do React, garantindo que
-      // o fechamento da janela do PDF morra nela mesma e não limpe a nossa rota!
-      setTimeout(() => {
-        exportToPDF(dadosParaExportar);
-      }, 0);
+      // 2. Roda o motor original que você já tinha e que funciona
+      exportToPDF(dadosParaExportar);
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
@@ -197,24 +193,16 @@ const handleExportar = () => {
     try {
       const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-      const textoCalculo = generateCalculationText(
-        { ...resultados, dadosContrato: dadosContrato || {} as DadosContrato },
-        { dataCalculo: dataCalculo, nomeEscritorio: nomeEscritorio }
-      );
-
-      // 🛡️ ISOLAMENTO COMPLETO: O confirm nativo congela a thread do navegador.
-      // Ao jogá-lo no setTimeout, o React finaliza o evento do clique primeiro,
-      // evitando que o fechamento do confirm resete a calculadora para a Home.
-      setTimeout(() => {
-        const confirmacao = window.confirm('Escolha o método de compartilhamento:\nOK = WhatsApp\nCancelar = Email');
-        
-        if (confirmacao) {
-          shareViaWhatsApp(textoCalculo);
-        } else {
-          shareViaEmail('Resultado do Cálculo Trabalhista', textoCalculo);
-        }
-      }, 0);
-
+      // Voltando para o seu motor original de compartilhar do Lovable
+      if (navigator.share) {
+        navigator.share({
+          title: 'Cálculo Trabalhista - IusCalc',
+          text: `Relatório gerado em ${dataCalculo} por ${nomeEscritorio}`,
+          url: window.location.href,
+        }).catch(err => console.error('Erro ao compartilhar:', err));
+      } else {
+        navigator.clipboard.writeText(window.location.href);
+      }
     } catch (error) {
       console.error('Erro ao compartilhar:', error);
     }
