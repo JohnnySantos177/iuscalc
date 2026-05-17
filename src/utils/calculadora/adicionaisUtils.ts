@@ -145,7 +145,7 @@ export const calcularCustom = (calcular: boolean, valor: number): number => {
 // Helper functions for beneficiosSociaisUtils
 export function calcularSeguroDesempregoHelper(adicionais: Adicionais, salarioBase: number, tipoRescisao: string) {
   if (!adicionais.calcularSeguroDesemprego) return 0;
-  
+
   // Parse the values properly
   const ultimoSalario = parseFloat(adicionais.ultimoSalario) || salarioBase;
   const salarioMes1 = parseFloat(adicionais.salarioMes1) || ultimoSalario;
@@ -153,24 +153,27 @@ export function calcularSeguroDesempregoHelper(adicionais: Adicionais, salarioBa
   const mesesTrabalhados = parseInt(adicionais.mesesTrabalhadosUltimoEmprego) || 12;
   const tipoTrabalhador = adicionais.tipoTrabalhador || 'padrao';
   const salarioUltimos3Meses = adicionais.salarioUltimos3Meses || 'sim';
-  
-  // Only calculate for eligible termination types
-  if (tipoRescisao !== 'sem_justa_causa' && tipoRescisao !== 'rescisao_indireta') {
+
+  // Trabalhador resgatado tem direito especial (Lei 10.608/2002) — não depende do tipo de rescisão
+  const isResgatado = tipoTrabalhador === 'resgatado';
+
+  // Para os demais tipos, só é elegível com sem_justa_causa ou rescisao_indireta
+  if (!isResgatado && tipoRescisao !== 'sem_justa_causa' && tipoRescisao !== 'rescisao_indireta') {
     return 0;
   }
-  
+
   // Calculate using the updated function
   const { valorTotal } = calcularSeguroDesemprego(
-    true, 
-    tipoRescisao, 
+    true,
+    tipoRescisao,
     tipoTrabalhador,
     salarioUltimos3Meses,
     ultimoSalario,
     salarioMes1,
-    salarioMes2, 
+    salarioMes2,
     mesesTrabalhados
   );
-  
+
   return valorTotal;
 }
 

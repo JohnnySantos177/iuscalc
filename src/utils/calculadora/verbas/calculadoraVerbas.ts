@@ -166,19 +166,21 @@ export const calcularVerbasRescisorias = (dadosContrato: DadosContrato): Resulta
         mesesTrabalhados
       ) * 0.5; // 50% do aviso prévio
 
+      // Art. 484-A CLT: apenas aviso prévio (50%) e multa FGTS (20%) são reduzidos.
+      // 13º salário e férias proporcionais são devidos integralmente.
       decimoTerceiro = calcularDecimoTerceiro(
         salarioBase,
         dadosContrato.dataAdmissao,
         dadosContrato.dataDemissao,
         motivoDemissao
-      ) * 0.5; // 50% do 13º salário
+      );
 
       feriasProporcionais = calcularFerias(
         salarioBase,
         dadosContrato.dataAdmissao,
         dadosContrato.dataDemissao,
         motivoDemissao
-      ) * 0.5; // 50% das férias
+      );
       
       tercoConstitucional = calcularTercoConstitucional(feriasProporcionais);
       fgts = calcularFGTS(salarioBase, mesesTrabalhados, diasTrabalhados);

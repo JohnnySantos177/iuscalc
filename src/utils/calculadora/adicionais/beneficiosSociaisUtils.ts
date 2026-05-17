@@ -27,14 +27,24 @@ export const calcularSeguroDesemprego = (
 ): { valorParcela: number, numeroParcelas: number, valorTotal: number } => {
   if (!calcular) return { valorParcela: 0, numeroParcelas: 0, valorTotal: 0 };
   
+  // Trabalhador resgatado de trabalho análogo à escravidão (Lei 10.608/2002):
+  // direito a 3 parcelas de 1 salário mínimo, independentemente do tipo de rescisão.
+  if (tipoTrabalhador === 'resgatado') {
+    return {
+      valorParcela: VALOR_SALARIO_MINIMO_2025,
+      numeroParcelas: 3,
+      valorTotal: VALOR_SALARIO_MINIMO_2025 * 3,
+    };
+  }
+
   // Verifica se é elegível com base no tipo de rescisão
   const elegivel = tipoRescisao === 'sem_justa_causa' || tipoRescisao === 'rescisao_indireta';
-  
+
   if (!elegivel) return { valorParcela: 0, numeroParcelas: 0, valorTotal: 0 };
-  
+
   // Determinar número de parcelas com base no tempo de trabalho
   let numeroParcelas = 0;
-  
+
   if (mesesTrabalhadosUltimoEmprego >= 6 && mesesTrabalhadosUltimoEmprego < 12) {
     numeroParcelas = 3;
   } else if (mesesTrabalhadosUltimoEmprego >= 12 && mesesTrabalhadosUltimoEmprego < 24) {
@@ -42,20 +52,21 @@ export const calcularSeguroDesemprego = (
   } else if (mesesTrabalhadosUltimoEmprego >= 24) {
     numeroParcelas = 5;
   }
-  
+
   let valorParcela = 0;
-  
+
   // Para empregados domésticos e pescadores artesanais
   if (tipoTrabalhador === 'domestico' || tipoTrabalhador === 'pescador') {
     valorParcela = VALOR_SALARIO_MINIMO_2025;
   } else {
-    // Cálculo da média salarial
+    // Cálculo da média salarial dos últimos 3 meses (art. 5º Lei 7.998/90)
     let mediaSalarial = 0;
-    
+
     if (salarioUltimos3Meses === 'sim') {
       mediaSalarial = ultimoSalario;
     } else {
-      mediaSalarial = (salarioMes1 + salarioMes2) / 2;
+      // Média real dos 3 meses informados
+      mediaSalarial = (salarioMes1 + salarioMes2 + ultimoSalario) / 3;
     }
     
     // Cálculo do valor da parcela baseado nas faixas de 2025

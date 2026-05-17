@@ -3,7 +3,8 @@
 
 // Import the necessary functions from verbasRescisoriasUtils
 import { calcularVerbasRescisorias } from './verbas/calculadoraVerbas';
-import { 
+import { calcularMultaFGTS } from './verbas/fgtsUtils';
+import {
   calcularAdicionais,
   calcularSeguroDesempregoHelper,
   calcularSalarioFamiliaHelper,
@@ -80,6 +81,29 @@ export const realizarCalculos = (dadosContrato: DadosContrato, adicionais: Adici
     honorariosAdvocaticios: 0,
   } : adicionaisValues;
 
+  // Fix 4: Correção do FGTS — base deve incluir adicionais habituais
+  // (art. 15, §6º Lei 8.036/90; Súmula 63 TST)
+  // Os adicionaisValuesObj representam o total recebido no período;
+  // FGTS = 8% do total → fgtsCorrecao = adicionaisSalariaisHabituais × 0,08
+  const adicionaisSalariaisHabituais =
+    adicionaisValuesObj.adicionalInsalubridade +
+    adicionaisValuesObj.adicionalPericulosidade +
+    adicionaisValuesObj.adicionalNoturno +
+    adicionaisValuesObj.horasExtras;
+
+  const fgtsCorrecaoAdicionais = adicionaisSalariaisHabituais * 0.08;
+  const multaFgtsCorrecaoAdicionais = calcularMultaFGTS(fgtsCorrecaoAdicionais, dadosContrato.motivoDemissao);
+  // Se FGTS já foi depositado, o empregador também deveria ter depositado sobre os adicionais;
+  // nesse caso não somamos novamente o FGTS, mas a multa sobre os adicionais permanece.
+  const fgtsAdicionaisFinal = dadosContrato.fgtsDepositado ? 0 : fgtsCorrecaoAdicionais;
+
+  console.log('Correção FGTS sobre adicionais habituais:', {
+    adicionaisSalariaisHabituais,
+    fgtsCorrecaoAdicionais,
+    multaFgtsCorrecaoAdicionais,
+    fgtsAdicionaisFinal,
+  });
+
   // Calculate unemployment insurance
   console.log('Calculando seguro-desemprego...');
   const seguroDesempregoValue = calcularSeguroDesempregoHelper(adicionais, salarioBase, dadosContrato.motivoDemissao);
@@ -90,7 +114,7 @@ export const realizarCalculos = (dadosContrato: DadosContrato, adicionais: Adici
   const salarioFamiliaValue = calcularSalarioFamiliaHelper(adicionais.calcularSalarioFamilia, salarioBase, parseInt(adicionais.quantidadeFilhos) || 0);
   console.log('Salário-família:', salarioFamiliaValue);
 
-  const totalGeralAntesHonorarios = 
+  const totalGeralAntesHonorarios =
     (verbasRescisoriasCalculadas.total || 0) +
     adicionaisValuesObj.adicionalInsalubridade +
     adicionaisValuesObj.adicionalPericulosidade +
@@ -107,7 +131,10 @@ export const realizarCalculos = (dadosContrato: DadosContrato, adicionais: Adici
     adicionaisValuesObj.multa467 +
     adicionaisValuesObj.multa477 +
     seguroDesempregoValue +
-    salarioFamiliaValue;
+    salarioFamiliaValue +
+    // Correção FGTS sobre adicionais habituais (art. 15, §6º Lei 8.036/90; Súmula 63 TST)
+    fgtsAdicionaisFinal +
+    multaFgtsCorrecaoAdicionais;
 
   console.log('Total geral antes dos honorários:', totalGeralAntesHonorarios);
 
@@ -134,8 +161,8 @@ export const realizarCalculos = (dadosContrato: DadosContrato, adicionais: Adici
         decimoTerceiro: verbasRescisoriasCalculadas.decimoTerceiro || 0,
         feriasProporcionais: verbasRescisoriasCalculadas.feriasProporcionais || 0,
         avisoPrevio: verbasRescisoriasCalculadas.avisoPrevio || 0,
-        fgts: verbasRescisoriasCalculadas.fgts || 0,
-        multaFgts: verbasRescisoriasCalculadas.multaFgts || 0,
+        fgts: (verbasRescisoriasCalculadas.fgts || 0) + fgtsAdicionaisFinal,
+        multaFgts: (verbasRescisoriasCalculadas.multaFgts || 0) + multaFgtsCorrecaoAdicionais,
         tercoConstitucional: verbasRescisoriasCalculadas.tercoConstitucional || 0,
         decimoTerceiroAvisoPrevio: verbasRescisoriasCalculadas.decimoTerceiroAvisoPrevio || 0,
         feriasAvisoPrevio: verbasRescisoriasCalculadas.feriasAvisoPrevio || 0,
@@ -146,7 +173,7 @@ export const realizarCalculos = (dadosContrato: DadosContrato, adicionais: Adici
         adicionalTransferencia: adicionaisValuesObj.adicionalTransferencia || 0,
         descontosIndevidos: adicionaisValuesObj.descontosIndevidos || 0,
         diferencasSalariais: adicionaisValuesObj.diferencasSalariais || 0,
-        total: verbasRescisoriasCalculadas.total || 0,
+        total: (verbasRescisoriasCalculadas.total || 0) + fgtsAdicionaisFinal + multaFgtsCorrecaoAdicionais,
       },
       adicionais: {
         insalubridade: adicionaisValuesObj.adicionalInsalubridade || 0,

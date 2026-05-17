@@ -50,7 +50,8 @@ export const calcularHorasExtras = (salarioBase: number, adicionais: Adicionais)
         return total; // Retorna o total acumulado até o momento
       }
 
-      return total + (valorHoraNormal * (percentual / 100) * totalHorasExtras);
+      // Hora extra = hora normal + adicional (ex.: 50% → paga 1,5× a hora normal)
+      return total + (valorHoraNormal * (1 + percentual / 100) * totalHorasExtras);
     }, 0);
 
     return valorTotalHorasExtras;
