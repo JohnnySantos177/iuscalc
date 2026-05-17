@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calculator, Users, TrendingUp, FileText, Clock, Award } from "lucide-react";
+import { Calculator, TrendingUp, FileText, Clock, Award } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/utils/format";
@@ -145,13 +145,7 @@ export function HomePage() {
                     Meus Cálculos ({totalCalculos})
                   </Link>
                 </Button>
-                <Button asChild variant="outline" className="w-full justify-start">
-                  <Link to="/minha-conta">
-                    <Users className="w-4 h-4 mr-2" />
-                    Perfil
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" className="w-full justify-start">
+<Button asChild variant="outline" className="w-full justify-start">
                   <Link to="/calculadora">
                     <TrendingUp className="w-4 h-4 mr-2" />
                     Relatórios

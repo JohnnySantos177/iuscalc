@@ -33,7 +33,17 @@ export function ResultsActions({ onSalvar, onExportar, onCompartilhar }: Results
       </Button>
 
       {onCompartilhar && (
-        <Button variant="outline" size="sm" className="text-juriscalc-blue" onClick={onCompartilhar}>
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="text-juriscalc-blue"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onCompartilhar();
+          }}
+        >
           <Share2 className="w-4 h-4 mr-1" />
           Compartilhar
         </Button>
