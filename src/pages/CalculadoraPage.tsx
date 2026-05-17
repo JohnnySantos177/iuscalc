@@ -189,7 +189,10 @@ export function CalculadoraPage() {
         <div className="mt-6">
           <ResultadosCalculo
             resultados={state.resultados}
-            horasExtras={state.adicionais.horasExtras}
+            horasExtras={{
+              ativo: state.adicionais.calcularHorasExtras,
+              calculos: state.adicionais.horasExtrasCalculos
+            }}
             dadosContrato={state.dadosContrato}
             onSalvar={handleSalvarCalculo}
           />
