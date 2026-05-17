@@ -178,24 +178,21 @@ const handleExportar = () => {
         }
       };
       
-      // 1. Garante que os dados do cálculo atual fiquem trancados no cache
+      // 1. Salva o backup dos dados no cache
       localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
 
-      // 2. Dispara a abertura do PDF (que vai abrir na aba separada)
-      exportToPDF(dadosParaExportar);
-
-      // 3. 🛡️ TRAVA ANTICRASH: Dá um pequeno intervalo para a nova aba abrir
-      // e força a aba da calculadora a se recarregar na rota raiz limpa (/).
-      // Isso impede o Lovable de te chutar para a Home e faz o hook ler o cache na hora!
+      // 2. Abre a aba do PDF de forma isolada
+      // Usamos um pequeno delay de 10ms para o React terminar de processar o clique
+      // antes do navegador abrir a nova janela, evitando que o Lovable perca o foco da rota
       setTimeout(() => {
-        window.location.pathname = '/';
-      }, 300);
+        exportToPDF(dadosParaExportar);
+      }, 10);
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
     }
   };
-  
+
   const handleCompartilhar = () => {
     const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
