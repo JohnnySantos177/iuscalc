@@ -18,7 +18,7 @@ interface ExportData {
   };
 }
 
-// Helper functions for display names (moved from SavedCalculations.tsx)
+// Helper functions for display names
 const getVerbaDisplayName = (key: string) => {
   const nomes: { [key: string]: string } = {
     'salarioProporcional': 'Saldo de Salário',
@@ -60,16 +60,9 @@ const getMultaDisplayName = (key: string) => {
   return nomes[key] || key;
 };
 
-// Modified to properly use print functionality with a focused content
+// Modificado para usar Iframe Invisível e evitar perda de foco (Fim do Reset para a Home)
 export const exportToPDF = (data: ExportData) => {
   const { resultados, dadosContrato, horasExtras, metadata } = data;
-
-  // Create a dedicated print window for just the results
-  const printWindow = window.open('', '_blank');
-  if (!printWindow) {
-    toast.error('Não foi possível abrir a janela de impressão. Verifique se o bloqueador de pop-ups está desativado.');
-    return;
-  }
 
   // Format values as currency
   const formatCurrency = (value: number) => {
@@ -80,6 +73,8 @@ export const exportToPDF = (data: ExportData) => {
   const nomeEscritorio = metadata?.nomeEscritorio || localStorage.getItem('userName') || 'IusCalc';
 
   const htmlContent = `
+    <html>
+    <head>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -188,6 +183,7 @@ export const exportToPDF = (data: ExportData) => {
         }
       }
     </style>
+    </head>
     <body>
       <div class="header">
         <h1>DEMONSTRATIVO DE CÁLCULOS TRABALHISTAS</h1>
@@ -216,9 +212,9 @@ export const exportToPDF = (data: ExportData) => {
             dadosContrato.motivoDemissao === 'sem_justa_causa' ? 'Dispensa sem Justa Causa' :
             dadosContrato.motivoDemissao === 'justa_causa' ? 'Dispensa por Justa Causa' :
             dadosContrato.motivoDemissao === 'pedido_demissao' ? 'Pedido de Demissão' :
-    dadosContrato.motivoDemissao === 'acordo_mutuo' ? 'Acordo Mútuo' : 'Não informado'
-  }</span>
-</div>
+            dadosContrato.motivoDemissao === 'acordo_mutuo' ? 'Acordo Mútuo' : 'Não informado'
+          }</span>
+          </div>
         ` : `<p class="text-gray-500">Dados do contrato não disponíveis.</p>`}
       </div>
 
@@ -294,13 +290,51 @@ export const exportToPDF = (data: ExportData) => {
     </html>
   `;
 
-  printWindow.document.write(htmlContent);
-  printWindow.document.close();
+  // 🛡️ A MÁGICA DO IFRAME INVISÍVEL
+  const iframeId = 'print-iframe-iuscalc';
+  
+  // Limpa qualquer iframe antigo que tenha ficado preso
+  const iframeAntigo = document.getElementById(iframeId);
+  if (iframeAntigo) {
+    document.body.removeChild(iframeAntigo);
+  }
 
-  setTimeout(() => {
-    printWindow.print();
-    setTimeout(() => printWindow.close(), 500);
-  }, 500);
+  // Cria um iframe totalmente invisível
+  const iframe = document.createElement('iframe');
+  iframe.id = iframeId;
+  iframe.style.position = 'fixed';
+  iframe.style.right = '0';
+  iframe.style.bottom = '0';
+  iframe.style.width = '0';
+  iframe.style.height = '0';
+  iframe.style.border = '0';
 
-  toast.success('Demonstrativo de cálculos enviado para impressão como PDF!');
+  document.body.appendChild(iframe);
+
+  const iframeDoc = iframe.contentWindow?.document || iframe.contentDocument;
+
+  if (iframeDoc) {
+    iframeDoc.open();
+    iframeDoc.write(htmlContent);
+    iframeDoc.close();
+
+    // Aguarda o HTML renderizar dentro do iframe e chama a impressão
+    setTimeout(() => {
+      if (iframe.contentWindow) {
+        iframe.contentWindow.focus(); // Foca apenas o iframe
+        iframe.contentWindow.print();
+        toast.success('Demonstrativo de cálculos enviado para impressão como PDF!');
+
+        // Remove o iframe da memória após um tempo seguro para não pesar o navegador
+        setTimeout(() => {
+          const frameParaRemover = document.getElementById(iframeId);
+          if (frameParaRemover) {
+            document.body.removeChild(frameParaRemover);
+          }
+        }, 5000);
+      }
+    }, 500);
+  } else {
+    toast.error('Erro ao gerar o documento para impressão.');
+  }
 };
