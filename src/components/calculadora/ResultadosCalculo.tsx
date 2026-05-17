@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Resultados, DadosContrato } from '@/types/calculadora';
 import { exportToPDF } from '@/utils/export/pdfExport';
-import { shareViaWhatsApp, shareViaEmail, generateCalculationText } from '@/utils/export/shareUtils';
+import { shareViaWhatsApp, generateCalculationText } from '@/utils/export/shareUtils';
 import { formatCurrency } from '@/utils/format';
 import { ResultsActions } from './results/ResultsActions';
 import { CalculationSection } from './results/CalculationSection';
@@ -193,16 +193,12 @@ const handleExportar = () => {
     try {
       const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-      // Executa o compartilhamento original do Lovable que interage com o navegador
-      if (navigator.share) {
-        navigator.share({
-          title: 'Cálculo Trabalhista - IusCalc',
-          text: `Relatório gerado em ${dataCalculo} por ${nomeEscritorio}`,
-          url: window.location.href,
-        }).catch(err => console.error('Erro ao compartilhar:', err));
-      } else {
-        navigator.clipboard.writeText(window.location.href);
-      }
+      const textoCalculo = generateCalculationText(
+        { ...resultados, dadosContrato: dadosContrato },
+        { dataCalculo, nomeEscritorio }
+      );
+
+      shareViaWhatsApp(textoCalculo);
     } catch (error) {
       console.error('Erro ao compartilhar:', error);
     }
