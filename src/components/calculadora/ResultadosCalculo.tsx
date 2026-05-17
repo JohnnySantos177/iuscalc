@@ -105,7 +105,8 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
   const adicionaisItems = [
     { label: 'Insalubridade', value: detalhamento.adicionais?.insalubridade || 0, icon: <AlertTriangle className="w-4 h-4" /> },
     { label: 'Periculosidade', value: detalhamento.adicionais?.periculosidade || 0, icon: <AlertTriangle className="w-4 h-4" /> },
-    { label: 'Adicional Noturno', value: detalhamento.adicionais?.noturno || 0, icon: <Clock className="w-4 h-4" /> }
+    { label: 'Adicional Noturno', value: detalhamento.adicionais?.noturno || 0, icon: <Clock className="w-4 h-4" /> },
+    { label: 'Horas Extras', value: detalhamento.adicionais?.horasExtras || 0, icon: <Clock className="w-4 h-4" /> }
   ].filter(item => item.value > 0);
 
   const verbasBeneficiosItems = [
@@ -286,7 +287,7 @@ const handleExportar = () => {
               </div>
             )}
 
-            {(adicionaisItems.length > 0 || detalhamento.adicionais?.horasExtras > 0) && (
+            {adicionaisItems.length > 0 && (
               <div className="bg-indigo-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-indigo-800">
                   <Clock className="w-5 h-5" />
@@ -304,12 +305,6 @@ const handleExportar = () => {
                       </Badge>
                     </div>
                   ))}
-                  {detalhamento.adicionais?.horasExtras > 0 && (
-                    <HorasExtrasSection
-                      horasExtras={horasExtras}
-                      totalValue={detalhamento.adicionais.horasExtras}
-                    />
-                  )}
                 </div>
               </div>
             )}
