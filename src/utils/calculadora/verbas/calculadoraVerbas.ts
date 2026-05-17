@@ -54,8 +54,11 @@ export const calcularVerbasRescisorias = (dadosContrato: DadosContrato): Resulta
     motivoDemissao
   });
 
-  // Calculation for indenizacaoQuebraContrato is general for fixed-term contracts, regardless of termination reason.
-  indenizacaoDemissaoIndevida = contratoTempoDeterminado 
+  // Art. 479 CLT: indenização de metade do restante do contrato só é devida ao empregado
+  // quando o EMPREGADOR rompe o contrato de prazo determinado antecipadamente.
+  // Não se aplica a pedido_demissao, justa_causa ou acordo_mutuo.
+  const motivosComIndenizacao = motivoDemissao === 'sem_justa_causa' || motivoDemissao === 'rescisao_indireta';
+  indenizacaoDemissaoIndevida = contratoTempoDeterminado && motivosComIndenizacao
     ? calcularIndenizacaoQuebraContrato(salarioBase, mesesRestantesContrato)
     : 0;
 
@@ -70,12 +73,15 @@ export const calcularVerbasRescisorias = (dadosContrato: DadosContrato): Resulta
         mesesTrabalhados
       );
 
-      // Se aviso prévio não foi cumprido, calcular valores proporcionais do aviso prévio
+      // Se aviso prévio não foi cumprido, calcular valores proporcionais ao aviso prévio indenizado.
+      // Lei 12.506/2011: aviso prévio = 30 dias + 3 dias por ano completo, até 90 dias.
       if (!avisoPrevioCumprido) {
-        // Férias proporcionais do aviso prévio: (Salário/12) + (Salário/12)/3 = (Salário/12) × (4/3)
-        feriasAvisoPrevio = (salarioBase / 12) + ((salarioBase / 12) / 3);
-        // 13º proporcional ao aviso prévio (1/12 do salário)
-        decimoTerceiroAvisoPrevio = salarioBase / 12;
+        const diasAdicionaisAviso = Math.min(Math.floor(mesesTrabalhados / 12) * 3, 60);
+        const diasAviso = 30 + diasAdicionaisAviso;
+        // 13º proporcional: (salário/12) × (diasAviso/30)
+        decimoTerceiroAvisoPrevio = (salarioBase / 12) * (diasAviso / 30);
+        // Férias do aviso prévio: mesma proporção + 1/3 constitucional obrigatório (art. 7º, XVII CF)
+        feriasAvisoPrevio = decimoTerceiroAvisoPrevio * (4 / 3);
       }
       
       // 13º salário proporcional apenas sobre o período trabalhado (sem incluir aviso prévio)

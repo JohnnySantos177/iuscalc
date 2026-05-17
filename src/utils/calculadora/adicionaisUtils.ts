@@ -77,8 +77,9 @@ export const calcularFeriasVencidas = (
   periodos: number
 ): number => {
   if (!calcular) return 0;
-  
-  return salarioBase * periodos;
+
+  // Férias vencidas = salário × períodos + 1/3 constitucional obrigatório (art. 7º, XVII CF)
+  return salarioBase * periodos * (4 / 3);
 };
 
 export const calcularIndenizacaoDemissao = (
