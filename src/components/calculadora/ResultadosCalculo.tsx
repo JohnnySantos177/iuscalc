@@ -164,38 +164,54 @@ export function ResultadosCalculo({ resultados, horasExtras, dadosContrato, onSa
     { label: 'Cálculos Personalizados', value: detalhamento.calculosPersonalizados || 0, icon: <Calculator className="w-4 h-4" /> }
   ].filter(item => item.value > 0);
 
- const handleExportar = () => {
-    const { dataCalculo, nomeEscritorio } = prepararMetadados();
+const handleExportar = () => {
+    try {
+      const { dataCalculo, nomeEscritorio } = prepararMetadados();
 
-    const dadosParaExportar = {
-      resultados: resultados,
-      dadosContrato: dadosContrato || {} as DadosContrato,
-      horasExtras: horasExtras,
-      metadata: {
-        dataAtual: dataCalculo,
-        nomeEscritorio: nomeEscritorio
-      }
-    };
-    
-    localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
-
-    const novaAba = window.open('', '_blank');
-    
-    if (novaAba) {
-      novaAba.document.write('<html><head><title>Gerando Relatório...</title></head><body></body></html>');
-      
-      exportToPDF(dadosParaExportar); 
-
-      // 🛡️ REDIRECIONAMENTO SEGURO: Monitora o fechamento da aba de impressão
-      const checarAbaFechada = setInterval(() => {
-        if (novaAba.closed) {
-          clearInterval(checarAbaFechada);
-          
-          // Em vez de dar F5 na rota quebrada, força o navegador a ir para a raiz do app.
-          // Isso limpa o erro 404 e faz o hook carregar seus dados salvos na tela na hora!
-          window.location.href = `${window.location.origin}/calculadora`; 
+      const dadosParaExportar = {
+        resultados: resultados,
+        dadosContrato: dadosContrato || {} as DadosContrato,
+        horasExtras: horasExtras,
+        metadata: {
+          dataAtual: dataCalculo,
+          nomeEscritorio: nomeEscritorio
         }
-      }, 1000);
+      };
+      
+      // 1. Grava com segurança absoluta o estado atual no cache do navegador
+      localStorage.setItem('iuscalc_print_data', JSON.stringify(dadosParaExportar));
+      localStorage.setItem('iuscalc_active_state', JSON.stringify({
+        dadosContrato,
+        adicionais: horasExtras,
+        resultados
+      }));
+
+      // 2. Cria a nova aba isolada para o relatório
+      const novaAba = window.open('', '_blank');
+      if (novaAba) {
+        novaAba.document.write('<html><head><title>Processando PDF...</title></head><body></body></html>');
+        
+        // Executa o motor original do PDF
+        exportToPDF(dadosParaExportar);
+
+        // 🛡️ O SEGREDO: Quando fechar o PDF, força o navegador a recarregar a rota raiz limpa.
+        // Como o cache do localStorage já está salvo, o seu hook useCalculadoraState
+        // vai ler os dados no milésimo de segundo seguinte e fixar tudo na tela automaticamente!
+        const checarFechamento = setInterval(() => {
+          if (novaAba.closed) {
+            clearInterval(checarFechamento);
+            window.location.href = window.location.origin + '/'; // Garante o caminho base limpo sem 404 e sem chutar para /home
+          }
+        }, 1000);
+      }
+
+    } catch (error) {
+      console.error('Erro ao exportar:', error);
+    }
+  };
+
+    } catch (error) {
+      console.error('Erro ao preparar exportação:', error);
     }
   };
 
