@@ -9,9 +9,10 @@ import { ContractDataForm } from '@/components/calculadora/ContractDataForm';
 import { SavedCalculations } from '@/components/calculadora/SavedCalculations';
 import { toast } from 'sonner';
 import { CalculadoraState, DadosContrato } from '@/types/calculadora';
+import { Trash2 } from 'lucide-react';
 
 export function CalculadoraPage() {
-  const { state, updateState } = useCalculadoraState();
+  const { state, updateState, resetState } = useCalculadoraState();
   const { calcular } = useCalculos();
   const { 
     calculosSalvos, 
@@ -81,6 +82,13 @@ export function CalculadoraPage() {
     salvarCalculo(stateWithCalculosPersonalizados, state.resultados, nomePersonalizado || undefined);
   };
 
+  const handleLimpar = () => {
+    if (window.confirm('Tem certeza que deseja limpar todos os dados e começar um novo cálculo?')) {
+      resetState();
+      toast.success('Calculadora limpa! Pronto para um novo cálculo.');
+    }
+  };
+
   const handleEditarCalculo = (calculo: CalculoSalvo) => {
     updateState({
       dadosContrato: calculo.dadosContrato,
@@ -98,7 +106,17 @@ export function CalculadoraPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Calculadora Trabalhista</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Calculadora Trabalhista</h1>
+        <button
+          type="button"
+          onClick={handleLimpar}
+          className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+        >
+          <Trash2 className="w-4 h-4" />
+          Limpar dados
+        </button>
+      </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="space-y-8">
