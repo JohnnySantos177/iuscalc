@@ -1,5 +1,5 @@
-export const VALOR_SALARIO_MINIMO_2025 = 1518; // Valor do salário mínimo para 2025
-export const SALARIO_MINIMO = 1518; // Compatibilidade com código existente
+export const VALOR_SALARIO_MINIMO_2025 = 1621; // Valor do salário mínimo vigente (atualizado 2026)
+export const SALARIO_MINIMO = 1621; // Compatibilidade com código existente
 export const VALOR_MAXIMO_SEGURO_DESEMPREGO = 2313.74; // Valor máximo do seguro-desemprego 2025
 export const FAIXA_1_SEGURO_DESEMPREGO = 2138.76; // Primeira faixa do seguro-desemprego 2025
 export const FAIXA_2_SEGURO_DESEMPREGO = 3564.96; // Segunda faixa do seguro-desemprego 2025

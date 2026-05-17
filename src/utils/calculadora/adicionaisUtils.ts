@@ -5,17 +5,14 @@
 // Import specialized calculation utilities
 import { calcularInsalubridade as insalubridadeCalc, calcularPericulosidade as periculosidadeCalc } from './adicionais/adicionalBasicoUtils';
 import { calcularMulta467 as multa467Calc, calcularMulta477 as multa477Calc } from './adicionais/multasUtils';
-import { 
+import {
   calcularAdicionalNoturno as adicionalNoturnoCalc,
   calcularHorasExtras as horasExtrasCalc
 } from './adicionais/jornadaUtils';
-import { 
+import {
   calcularValeTransporte as valeTransporteCalc,
   calcularValeAlimentacao as valeAlimentacaoCalc
 } from './adicionais/beneficiosUtils';
-import { 
-  calcularDescontosIndevidos as descontosIndevidosCalc
-} from './adicionais/descontosUtils';
 import { calcularSeguroDesemprego, calcularSalarioFamilia } from './adicionais/beneficiosSociaisUtils';
 import { calcularInsalubridade as calcularInsalubridadeUtils } from './adicionais/insalubridadeUtils';
 import { calcularPericulosidade as calcularPericulosidadeUtils } from './adicionais/periculosidadeUtils';
@@ -32,11 +29,18 @@ export const calcularInsalubridade = calcularInsalubridadeUtils;
 export const calcularPericulosidade = calcularPericulosidadeUtils;
 
 // Wrappers for multasUtils functions
+// NOTA: o cálculo real da multa 467 (50% das verbas contestadas) é feito dentro de
+// calcularAdicionais via multa467Calc de multasUtils. Este wrapper simplificado
+// existe apenas para compatibilidade de API externa — use calcularAdicionais para
+// obter o valor correto no fluxo de cálculo.
 export const calcularMulta467 = (calcularMulta: boolean, salarioBase: number): number => {
   if (!calcularMulta) return 0;
-  return salarioBase;
+  // Aproximação conservadora: 50% do salário base.
+  // Para o valor preciso, use o fluxo completo via calcularAdicionais.
+  return salarioBase * 0.5;
 };
 
+// Multa 477 (art. 477, §8º CLT): equivale a 1 mês de salário do empregado.
 export const calcularMulta477 = (calcularMulta: boolean, salarioBase: number): number => {
   if (!calcularMulta) return 0;
   return salarioBase;

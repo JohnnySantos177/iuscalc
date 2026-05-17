@@ -147,13 +147,10 @@ export const calcularVerbasRescisorias = (dadosContrato: DadosContrato): Resulta
       fgts = calcularFGTS(salarioBase, mesesTrabalhados, diasTrabalhados);
       
       // Desconto do aviso prévio quando não cumprido (pedido de demissão)
+      // A extensão de 3 dias/ano (Lei 12.506/2011) é um DIREITO do empregado quando dispensado,
+      // não uma obrigação do empregado que pede demissão. O aviso do empregado é sempre fixo em 30 dias.
       if (!avisoPrevioCumprido && !contratoTempoDeterminado) {
-        descontoAvisoPrevio = calcularAvisoPrevia(
-          salarioBase,
-          'sem_justa_causa', // Para calcular o valor padrão do aviso prévio
-          false, // Não cumprido para obter valor cheio
-          mesesTrabalhados
-        );
+        descontoAvisoPrevio = salarioBase; // 30 dias = 1 salário (salário / 30 × 30)
       }
       break;
 
