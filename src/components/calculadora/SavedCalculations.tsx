@@ -22,7 +22,7 @@ import {
 import { CalculoSalvo } from '@/hooks/useCalculosSalvos';
 import { CalculationViewer } from './CalculationViewer';
 import { exportToPDF } from '@/utils/export/pdfExport';
-import { shareViaWhatsApp, shareViaEmail, generateCalculationText } from '@/utils/export/shareUtils';
+import { shareViaWhatsApp, generateCalculationText } from '@/utils/export/shareUtils';
 import { formatCurrency } from '@/utils/format';
 
 interface SavedCalculationsProps {
@@ -136,14 +136,8 @@ export const SavedCalculations = ({
       { ...calculo.resultados, dadosContrato: calculo.dadosContrato },
       { dataCalculo: dataCalculo, nomeEscritorio: nomeEscritorio, nomeCalculo: calculo.nome }
     );
-    
-    const confirmacao = window.confirm('Escolha o método de compartilhamento:\nOK = WhatsApp\nCancelar = Email');
-    
-    if (confirmacao) {
-      shareViaWhatsApp(textoCalculo);
-    } else {
-      shareViaEmail(`Cálculo Trabalhista - ${calculo.nome}`, textoCalculo);
-    }
+
+    shareViaWhatsApp(textoCalculo);
   };
 
   if (calculos.length === 0) {

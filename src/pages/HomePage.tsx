@@ -139,17 +139,23 @@ export function HomePage() {
                     Nova Calculadora
                   </Link>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <FileText className="w-4 h-4 mr-2" />
-                  Meus Cálculos ({totalCalculos})
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/calculadora">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Meus Cálculos ({totalCalculos})
+                  </Link>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <Users className="w-4 h-4 mr-2" />
-                  Perfil
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/minha-conta">
+                    <Users className="w-4 h-4 mr-2" />
+                    Perfil
+                  </Link>
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Relatórios
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/calculadora">
+                    <TrendingUp className="w-4 h-4 mr-2" />
+                    Relatórios
+                  </Link>
                 </Button>
               </CardContent>
             </Card>
