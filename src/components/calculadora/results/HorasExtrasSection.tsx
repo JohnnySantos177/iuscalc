@@ -15,7 +15,7 @@ interface HorasExtrasSectionProps {
 }
 
 export function HorasExtrasSection({ horasExtras, totalValue }: HorasExtrasSectionProps) {
-  if (!horasExtras.ativo || horasExtras.calculos.length === 0) {
+  if (totalValue <= 0) {
     return null;
   }
 
