@@ -286,7 +286,7 @@ const handleExportar = () => {
               </div>
             )}
 
-            {adicionaisItems.length > 0 && (
+            {(adicionaisItems.length > 0 || detalhamento.adicionais?.horasExtras > 0) && (
               <div className="bg-indigo-50 rounded-lg p-4">
                 <h3 className="text-lg font-medium mb-4 flex items-center gap-2 text-indigo-800">
                   <Clock className="w-5 h-5" />
@@ -304,10 +304,12 @@ const handleExportar = () => {
                       </Badge>
                     </div>
                   ))}
-                  <HorasExtrasSection
-                    horasExtras={horasExtras}
-                    totalValue={detalhamento.adicionais.horasExtras}
-                  />
+                  {detalhamento.adicionais?.horasExtras > 0 && (
+                    <HorasExtrasSection
+                      horasExtras={horasExtras}
+                      totalValue={detalhamento.adicionais.horasExtras}
+                    />
+                  )}
                 </div>
               </div>
             )}

@@ -20,16 +20,17 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
         {/* Multa Art. 467 */}
         <div className="flex items-center justify-between">
           <Label htmlFor="multa467">Multa do Art. 467 da CLT (50% sobre verbas incontroversas)</Label>
-          <Switch 
+          <Switch
             id="multa467"
             checked={state.multas.art467.ativo}
             onCheckedChange={(checked) => updateState({
               multas: {
                 ...state.multas,
-                art467: {
-                  ...state.multas.art467,
-                  ativo: checked
-                }
+                art467: { ...state.multas.art467, ativo: checked }
+              },
+              adicionais: {
+                ...state.adicionais,
+                calcularMulta467: checked
               }
             })}
           />
@@ -38,16 +39,17 @@ export function MultasOutrosAdicionais({ state, updateState }: MultasOutrosAdici
         {/* Multa Art. 477 */}
         <div className="flex items-center justify-between">
           <Label htmlFor="multa477">Multa do Art. 477 da CLT (atraso no pagamento)</Label>
-          <Switch 
+          <Switch
             id="multa477"
             checked={state.multas.art477.ativo}
             onCheckedChange={(checked) => updateState({
               multas: {
                 ...state.multas,
-                art477: {
-                  ...state.multas.art477,
-                  ativo: checked
-                }
+                art477: { ...state.multas.art477, ativo: checked }
+              },
+              adicionais: {
+                ...state.adicionais,
+                calcularMulta477: checked
               }
             })}
           />
