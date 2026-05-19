@@ -106,18 +106,15 @@ export function UserManagement() {
   if (!editingUser) return;
 
   try {
-    const { error } = await supabase
-      .from('profiles')
-      .update({
-        nome: formData.nome,
-        email: formData.email,
-        tipo_usuario: formData.tipo_usuario,
-        tipo_plano: formData.tipo_plano,
-        is_premium: formData.tipo_plano === 'premium', // Garante que is_premium acompanhe o plano
-        is_admin: formData.tipo_usuario !== 'usuario',
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', editingUser.id);
+    const { error } = await supabase.rpc('update_user_profile', {
+      target_user_id: editingUser.id,
+      new_nome: formData.nome,
+      new_email: formData.email,
+      new_tipo_usuario: formData.tipo_usuario,
+      new_tipo_plano: formData.tipo_plano,
+      new_is_admin: formData.tipo_usuario !== 'usuario',
+      new_is_premium: formData.tipo_plano === 'premium',
+    });
 
     if (error) throw error;
 
