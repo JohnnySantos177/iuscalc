@@ -7,6 +7,7 @@ export interface User {
   phone?: string;
   created_at: string;
   trial_end_date?: string;
+  nomeEscritorio?: string;
 }
 
 export interface AuthState {

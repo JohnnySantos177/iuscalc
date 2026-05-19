@@ -54,7 +54,7 @@ export const criarHTMLCalculosEmbutidos = (calculos: CalculosEmbutidos) => {
 
   // Importar dados necessários
   const logoUrl = localStorage.getItem('userLogoUrl');
-  const nomeEscritorio = calculos?.nomeEscritorio || localStorage.getItem('userName') || 'IusCalc';
+  const nomeEscritorio = calculos?.nomeEscritorio || localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc';
   const dataCalculo = calculos.timestamp ? 
     new Date(calculos.timestamp).toLocaleDateString('pt-BR') : 
     new Date().toLocaleDateString('pt-BR');

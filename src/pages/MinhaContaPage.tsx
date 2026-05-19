@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Crown, User, Lock } from 'lucide-react';
+import { Crown, User, Lock, Building2 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -22,6 +22,43 @@ export const MinhaContaPage = () => {
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmarSenha, setConfirmarSenha] = useState('');
   const [alterandoSenha, setAlterandoSenha] = useState(false);
+
+  const [nomeEscritorio, setNomeEscritorio] = useState('');
+  const [salvandoEscritorio, setSalvandoEscritorio] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    const carregarEscritorio = async () => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('nome_escritorio')
+        .eq('id', user.id)
+        .maybeSingle();
+      const valor = data?.nome_escritorio || localStorage.getItem('nomeEscritorio') || '';
+      setNomeEscritorio(valor);
+    };
+    carregarEscritorio();
+  }, [user]);
+
+  const handleSalvarEscritorio = async () => {
+    if (!user) return;
+    setSalvandoEscritorio(true);
+    try {
+      const valor = nomeEscritorio.trim();
+      const { error } = await supabase
+        .from('profiles')
+        .update({ nome_escritorio: valor })
+        .eq('id', user.id);
+      if (error) throw error;
+      // Atualiza cache local para que exportações usem o valor atualizado imediatamente
+      localStorage.setItem('nomeEscritorio', valor);
+      toast.success('Nome do escritório salvo com sucesso!');
+    } catch {
+      toast.error('Erro ao salvar nome do escritório.');
+    } finally {
+      setSalvandoEscritorio(false);
+    }
+  };
 
   useEffect(() => {
     const carregarEstatisticas = async () => {
@@ -201,6 +238,40 @@ export const MinhaContaPage = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Dados do Escritório */}
+      <Card className="juriscalc-card mt-6">
+        <CardHeader>
+          <CardTitle className="text-juriscalc-navy flex items-center">
+            <Building2 className="w-5 h-5 mr-2" />
+            Dados do Escritório
+          </CardTitle>
+          <CardDescription>
+            O nome do escritório será exibido nos PDFs e no compartilhamento via WhatsApp
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-4 items-end">
+            <div className="flex-1 space-y-2">
+              <Label htmlFor="nomeEscritorio">Nome do Escritório</Label>
+              <Input
+                id="nomeEscritorio"
+                placeholder="Ex: Silva & Associados Advocacia"
+                value={nomeEscritorio}
+                onChange={(e) => setNomeEscritorio(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSalvarEscritorio()}
+              />
+            </div>
+            <Button
+              className="bg-juriscalc-blue hover:bg-juriscalc-navy"
+              onClick={handleSalvarEscritorio}
+              disabled={salvandoEscritorio}
+            >
+              {salvandoEscritorio ? 'Salvando...' : 'Salvar'}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Alterar Senha */}
       <Card className="juriscalc-card mt-6">

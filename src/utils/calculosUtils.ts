@@ -21,8 +21,8 @@ export const prepararMetadados = (options?: DisplayMetadataOptions) => {
 
   const logoUrl = localStorage.getItem('userLogoUrl');
 
-  // Prioriza nomeEscritorio das opções, depois localStorage, depois default
-  const nomeEscritorio = options?.nomeEscritorio || localStorage.getItem('userName') || 'IusCalc Trabalhista';
+  // Prioriza nomeEscritorio das opções, depois chave dedicada, depois userName legado, depois default
+  const nomeEscritorio = options?.nomeEscritorio || localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc Trabalhista';
 
   return {
     dataCalculo,

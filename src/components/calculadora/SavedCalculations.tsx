@@ -69,7 +69,7 @@ export const SavedCalculations = ({
     const dataAtual = new Date().toLocaleDateString('pt-BR');
     
     // Obter o nome do escritório
-    const nomeEscritorio = localStorage.getItem('userName') || 'IusCalc';
+    const nomeEscritorio = localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc';
 
     // Criar o HTML para impressão
     printDiv.innerHTML = `
@@ -130,7 +130,7 @@ export const SavedCalculations = ({
 
   const compartilharCalculo = (calculo: CalculoSalvo) => {
     const dataCalculo = new Date(calculo.dataCriacao).toLocaleDateString('pt-BR');
-    const nomeEscritorio = localStorage.getItem('userName') || 'IusCalc';
+    const nomeEscritorio = localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc';
 
     const textoCalculo = generateCalculationText(
       { ...calculo.resultados, dadosContrato: calculo.dadosContrato },

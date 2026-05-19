@@ -137,6 +137,7 @@ export type Database = {
           is_super_admin: boolean | null
           logo_url: string | null
           nome: string | null
+          nome_escritorio: string | null
           tipo_plano: string | null
           tipo_usuario: string | null
           updated_at: string | null
@@ -151,6 +152,7 @@ export type Database = {
           is_super_admin?: boolean | null
           logo_url?: string | null
           nome?: string | null
+          nome_escritorio?: string | null
           tipo_plano?: string | null
           tipo_usuario?: string | null
           updated_at?: string | null
@@ -165,6 +167,7 @@ export type Database = {
           is_super_admin?: boolean | null
           logo_url?: string | null
           nome?: string | null
+          nome_escritorio?: string | null
           tipo_plano?: string | null
           tipo_usuario?: string | null
           updated_at?: string | null

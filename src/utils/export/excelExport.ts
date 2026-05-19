@@ -138,7 +138,7 @@ export const exportToExcel = (data: ExcelExportData, fileName?: string) => {
     const defaultFileName = `calculo_trabalhista_${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}.xlsx`;
     
     // Add header information with logo
-    const nomeEscritorio = data.nomeEscritorio || localStorage.getItem('userName') || 'IusCalc';
+    const nomeEscritorio = data.nomeEscritorio || localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc';
     
     // Insert a header row with information
     XLSX.utils.sheet_add_aoa(ws, [

@@ -70,7 +70,7 @@ export const exportToPDF = (data: ExportData) => {
   };
 
   const dataAtual = metadata?.dataAtual || new Date().toLocaleDateString('pt-BR');
-  const nomeEscritorio = metadata?.nomeEscritorio || localStorage.getItem('userName') || 'IusCalc';
+  const nomeEscritorio = metadata?.nomeEscritorio || localStorage.getItem('nomeEscritorio') || localStorage.getItem('userName') || 'IusCalc';
 
   const htmlContent = `
     <html>
