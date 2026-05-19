@@ -20,9 +20,9 @@ const beneficios = [
 ];
 
 const planos = [
-  { nome: "Mensal", preco: "R$ 99,90", cor: "blue", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados"], destaque: false },
-  { nome: "Trimestral", preco: "R$ 89,90", cor: "red", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados", "Suporte prioritário"], destaque: true },
-  { nome: "Semestral", preco: "R$ 79,90", cor: "green", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados", "Suporte prioritário"], destaque: false },
+  { nome: "Mensal", preco: "R$ 99,90", cor: "blue", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados"], destaque: false, link: "https://pay.hotmart.com/Q105912864K" },
+  { nome: "Trimestral", preco: "R$ 89,90", cor: "red", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados", "Suporte prioritário"], destaque: true, link: "https://pay.hotmart.com/Q105912864K?off=84lcjlm6" },
+  { nome: "Semestral", preco: "R$ 79,90", cor: "green", beneficios: ["Acesso completo ao sistema", "Cálculos ilimitados", "Suporte por email", "Atualizações automáticas", "Relatórios personalizados", "Suporte prioritário"], destaque: false, link: "https://pay.hotmart.com/Q105912864K?off=ueg4hwk2" },
 ];
 
 const depoimentos = [
@@ -148,7 +148,9 @@ const Index = () => {
                     <li key={j} className="flex items-center"><span className="text-green-500 mr-2">✓</span>{b}</li>
                   ))}
                 </ul>
-                <Button className={`w-full ${plano.cor === 'blue' ? 'bg-blue-700 hover:bg-blue-800' : plano.cor === 'red' ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white py-3 rounded-lg transition-colors font-semibold`}>ASSINAR AGORA</Button>
+                <a href={plano.link} target="_blank" rel="noopener noreferrer" className="block w-full">
+                  <Button className={`w-full ${plano.cor === 'blue' ? 'bg-blue-700 hover:bg-blue-800' : plano.cor === 'red' ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'} text-white py-3 rounded-lg transition-colors font-semibold`}>ASSINAR AGORA</Button>
+                </a>
               </div>
             ))}
           </div>
