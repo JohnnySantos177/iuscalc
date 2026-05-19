@@ -226,7 +226,7 @@ export function HomePage() {
                     Desbloqueie recursos avançados e tenha cálculos ilimitados
                   </p>
                 </div>
-                <a href="/#planos">
+                <a href="/upgrade">
                   <Button className="bg-juriscalc-yellow text-juriscalc-navy hover:bg-yellow-300">
                     Assinar Agora
                   </Button>

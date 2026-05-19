@@ -12,6 +12,7 @@ import { CalculadoraPage } from "@/pages/CalculadoraPage";
 import { MinhaContaPage } from "@/pages/MinhaContaPage";
 import { SuperAdminPanel } from "@/pages/SuperAdminPanel";
 import { RelatoriosPage } from "@/pages/RelatoriosPage";
+import { UpgradePage } from "@/pages/UpgradePage";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -70,6 +71,15 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <RelatoriosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/upgrade"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <UpgradePage />
               </ProtectedRoute>
             }
           />

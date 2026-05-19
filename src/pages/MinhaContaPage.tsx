@@ -226,10 +226,12 @@ export const MinhaContaPage = () => {
             </div>
             
             {user.plan === 'standard' ? (
-              <Button className="w-full bg-juriscalc-gold hover:bg-juriscalc-gold/90">
-                <Crown className="w-4 h-4 mr-2" />
-                Fazer Upgrade para Premium
-              </Button>
+              <a href="/upgrade" className="block w-full">
+                <Button className="w-full bg-juriscalc-gold hover:bg-juriscalc-gold/90">
+                  <Crown className="w-4 h-4 mr-2" />
+                  Fazer Upgrade para Premium
+                </Button>
+              </a>
             ) : (
               <Button variant="outline" className="w-full">
                 Gerenciar Assinatura
