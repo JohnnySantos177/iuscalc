@@ -383,9 +383,11 @@ export function Login() {
                 </li>
               </ul>
               
-              <button className="w-full bg-juriscalc-yellow text-juriscalc-navy py-3 rounded-lg hover:bg-yellow-300 transition-colors font-semibold">
-                Assinar Premium
-              </button>
+              <a href="/#planos" className="block w-full">
+                <button className="w-full bg-juriscalc-yellow text-juriscalc-navy py-3 rounded-lg hover:bg-yellow-300 transition-colors font-semibold">
+                  Assinar Premium
+                </button>
+              </a>
             </div>
           </div>
         </div>

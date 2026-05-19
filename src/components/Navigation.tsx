@@ -28,7 +28,7 @@ export const Navigation = () => {
 
   // Exibir botão de Upgrade apenas para quem não é Premium/Admin
   if (!isPremium && !isSuperAdmin) {
-    navItems.push({ path: '/upgrade', label: 'Seja Premium', icon: Crown });
+    navItems.push({ path: '/#planos', label: 'Seja Premium', icon: Crown });
   }
 
   return (

@@ -209,11 +209,13 @@ export function LoginForm() {
                   Compartilhamento via WhatsApp, e-mail e exportação PDF/Excel
                 </li>
               </ul>
-              <Button 
-                className="w-full bg-yellow-400 hover:bg-yellow-300 text-juriscalc-navy font-semibold shadow-sm"
-              >
-                Assinar Premium
-              </Button>
+              <a href="/#planos" className="block w-full">
+                <Button
+                  className="w-full bg-yellow-400 hover:bg-yellow-300 text-juriscalc-navy font-semibold shadow-sm"
+                >
+                  Assinar Premium
+                </Button>
+              </a>
             </div>
 
             {/* Export Options */}

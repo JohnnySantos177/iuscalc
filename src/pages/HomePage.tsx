@@ -226,11 +226,11 @@ export function HomePage() {
                     Desbloqueie recursos avançados e tenha cálculos ilimitados
                   </p>
                 </div>
-                <Button 
-                  className="bg-juriscalc-yellow text-juriscalc-navy hover:bg-yellow-300"
-                >
-                  Assinar Agora
-                </Button>
+                <a href="/#planos">
+                  <Button className="bg-juriscalc-yellow text-juriscalc-navy hover:bg-yellow-300">
+                    Assinar Agora
+                  </Button>
+                </a>
               </div>
             </CardContent>
           </Card>
