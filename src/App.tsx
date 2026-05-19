@@ -77,7 +77,7 @@ const App = () => (
           <Route
             path="/upgrade"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute skipTrialCheck>
                 <Navigation />
                 <UpgradePage />
               </ProtectedRoute>

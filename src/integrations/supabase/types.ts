@@ -140,6 +140,7 @@ export type Database = {
           nome_escritorio: string | null
           tipo_plano: string | null
           tipo_usuario: string | null
+          trial_end_date: string | null
           updated_at: string | null
         }
         Insert: {
@@ -155,6 +156,7 @@ export type Database = {
           nome_escritorio?: string | null
           tipo_plano?: string | null
           tipo_usuario?: string | null
+          trial_end_date?: string | null
           updated_at?: string | null
         }
         Update: {
@@ -170,6 +172,7 @@ export type Database = {
           nome_escritorio?: string | null
           tipo_plano?: string | null
           tipo_usuario?: string | null
+          trial_end_date?: string | null
           updated_at?: string | null
         }
         Relationships: []

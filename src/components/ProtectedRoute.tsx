@@ -4,12 +4,12 @@ import { useAuth } from '@/hooks/useAuth';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredRole?: 'user' | 'admin' | 'super_admin';
+  skipTrialCheck?: boolean;
 }
 
-export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, requiredRole, skipTrialCheck = false }: ProtectedRouteProps) {
   const { user, loading } = useAuth();
 
-  // Aguarda a verificação de sessão antes de redirecionar
   if (loading) {
     return null;
   }
@@ -20,6 +20,17 @@ export function ProtectedRoute({ children, requiredRole }: ProtectedRouteProps) 
 
   if (requiredRole && user.role !== requiredRole) {
     return <Navigate to="/home" replace />;
+  }
+
+  // Verifica expiração do trial (exceto premium, super_admin e a própria página de upgrade)
+  if (!skipTrialCheck && user.plan !== 'premium' && user.role !== 'super_admin') {
+    const trialExpirado = user.trial_end_date
+      ? new Date(user.trial_end_date) < new Date()
+      : false;
+
+    if (trialExpirado) {
+      return <Navigate to="/upgrade" replace />;
+    }
   }
 
   return <>{children}</>;

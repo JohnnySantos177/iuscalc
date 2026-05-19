@@ -86,8 +86,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     plan: profile.tipo_plano === 'premium' ? 'premium' : 'standard',
                     phone: profile.nome || 'Não informado',
                     created_at: profile.created_at || new Date().toISOString(),
-                    trial_end_date: profile.tipo_plano === 'padrao' ?
-                      new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString() : undefined,
+                    trial_end_date: profile.tipo_plano !== 'premium' && profile.trial_end_date
+                      ? profile.trial_end_date
+                      : undefined,
                     nomeEscritorio: profile.nome_escritorio || ''
                   };
                   // Sincroniza cache local para que exportações funcionem sem chamada extra ao Supabase
