@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { RegisterForm } from '@/components/auth/RegisterForm';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -129,29 +129,41 @@ export const AuthPage = () => {
         ) : (
           <Tabs defaultValue={defaultTab} className="w-full">
             <TabsList className="grid w-full grid-cols-2 mb-6 bg-white/20 backdrop-blur-sm text-white">
-              <TabsTrigger 
-                value="login" 
+              <TabsTrigger
+                value="login"
                 className="data-[state=active]:bg-white data-[state=active]:text-juriscalc-navy"
               >
                 Entrar
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="register"
                 className="data-[state=active]:bg-white data-[state=active]:text-juriscalc-navy"
               >
                 Criar Conta
               </TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="login">
               <LoginForm />
             </TabsContent>
-            
+
             <TabsContent value="register">
               <RegisterForm />
             </TabsContent>
           </Tabs>
         )}
+
+        {/* Rodapé legal */}
+        <p className="text-center text-xs text-white/60 mt-6">
+          Ao usar o IusCalc, você concorda com nossos{' '}
+          <Link to="/termos" className="underline hover:text-white transition-colors">
+            Termos de Uso
+          </Link>{' '}
+          e nossa{' '}
+          <Link to="/privacidade" className="underline hover:text-white transition-colors">
+            Política de Privacidade
+          </Link>.
+        </p>
       </div>
     </div>
   );

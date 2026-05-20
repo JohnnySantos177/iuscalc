@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const RegisterForm = () => {
   const { register, loading: authLoading } = useAuth();
@@ -19,6 +20,7 @@ export const RegisterForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [aceitouTermos, setAceitouTermos] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,8 +44,8 @@ export const RegisterForm = () => {
   };
 
   const isLoading = authLoading || isSubmitting;
-  const canSubmit = formData.name && formData.email && formData.password && 
-                   formData.confirmPassword && formData.phone && !isLoading;
+  const canSubmit = formData.name && formData.email && formData.password &&
+                   formData.confirmPassword && formData.phone && aceitouTermos && !isLoading;
 
   return (
     <Card className="bg-white/95 backdrop-blur-sm shadow-xl border-white/20">
@@ -159,8 +161,31 @@ export const RegisterForm = () => {
             </div>
           </div>
           
-          <Button 
-            type="submit" 
+          {/* Aceite de Termos */}
+          <div className="flex items-start gap-2.5 pt-1">
+            <input
+              id="aceitarTermos"
+              type="checkbox"
+              checked={aceitouTermos}
+              onChange={(e) => setAceitouTermos(e.target.checked)}
+              disabled={isLoading}
+              className="mt-0.5 h-4 w-4 rounded border-gray-300 text-juriscalc-blue accent-juriscalc-blue flex-shrink-0 cursor-pointer"
+            />
+            <label htmlFor="aceitarTermos" className="text-xs text-gray-600 leading-snug cursor-pointer">
+              Li e concordo com os{' '}
+              <Link to="/termos" target="_blank" className="text-juriscalc-blue underline hover:text-juriscalc-navy">
+                Termos de Uso
+              </Link>{' '}
+              e a{' '}
+              <Link to="/privacidade" target="_blank" className="text-juriscalc-blue underline hover:text-juriscalc-navy">
+                Política de Privacidade
+              </Link>{' '}
+              do IusCalc.
+            </label>
+          </div>
+
+          <Button
+            type="submit"
             className="w-full bg-juriscalc-blue hover:bg-juriscalc-navy text-white font-medium py-2 px-4 rounded-md transition-colors duration-200"
             disabled={!canSubmit}
           >

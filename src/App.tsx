@@ -14,6 +14,8 @@ import { SuperAdminPanel } from "@/pages/SuperAdminPanel";
 import { RelatoriosPage } from "@/pages/RelatoriosPage";
 import { UpgradePage } from "@/pages/UpgradePage";
 import { ManualPage } from "@/pages/ManualPage";
+import { TermosPage } from "@/pages/TermosPage";
+import { PrivacidadePage } from "@/pages/PrivacidadePage";
 import { FeedbackButton } from "@/components/feedback/FeedbackButton";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
@@ -86,10 +88,9 @@ const App = () => (
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/manual"
-            element={<ManualPage />}
-          />
+          <Route path="/manual" element={<ManualPage />} />
+          <Route path="/termos" element={<TermosPage />} />
+          <Route path="/privacidade" element={<PrivacidadePage />} />
           <Route path="/index" element={<Index />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
