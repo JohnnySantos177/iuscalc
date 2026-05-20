@@ -53,6 +53,13 @@ export const calcularAvisoPrevia = (
     
     return valorTotal;
   }
+  // Acordo mútuo: aviso prévio calculado integralmente aqui; * 0.5 aplicado em calculadoraVerbas
+  else if (tipoRescisao === 'acordo_mutuo' && !avisoPrevioCumprido) {
+    const diasAdicionais = calcularDiasAdicionais(mesesTrabalhados);
+    const totalDias = 30 + diasAdicionais;
+    const valorDiario = salarioBase / 30;
+    return valorDiario * totalDias;
+  }
   // Pedido de demissão: empregado deve pagar se não cumprir
   else if (tipoRescisao === 'pedido_demissao' && !avisoPrevioCumprido) {
     return -salarioBase; // Valor negativo pois é um desconto ao empregado
