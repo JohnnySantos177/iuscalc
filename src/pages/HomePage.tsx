@@ -6,6 +6,7 @@ import { Calculator, TrendingUp, FileText, Clock, Award, BookOpen } from "lucide
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/utils/format";
+import { OnboardingModal } from "@/components/onboarding/OnboardingModal";
 
 interface CalculoSalvo {
   id: string;
@@ -19,6 +20,7 @@ export function HomePage() {
   const { user } = useAuth();
   const [calculosSalvos, setCalculosSalvos] = useState<CalculoSalvo[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mostrarOnboarding, setMostrarOnboarding] = useState(false);
 
   useEffect(() => {
     const carregarDadosReais = async () => {
@@ -29,20 +31,34 @@ export function HomePage() {
 
       try {
         console.log('Carregando dados reais do usuário:', user.id);
-        
-        // Buscar cálculos salvos reais do usuário
-        const { data: calculos, error } = await supabase
-          .from('calculos_salvos')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(3);
 
-        if (error) {
-          console.error('Erro ao carregar cálculos:', error);
+        // Buscar cálculos salvos e status de onboarding em paralelo
+        const [calculosResult, perfilResult] = await Promise.all([
+          supabase
+            .from('calculos_salvos')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(3),
+          supabase
+            .from('profiles')
+            .select('onboarding_completo')
+            .eq('id', user.id)
+            .maybeSingle(),
+        ]);
+
+        if (calculosResult.error) {
+          console.error('Erro ao carregar cálculos:', calculosResult.error);
         } else {
-          console.log('Cálculos carregados:', calculos?.length || 0);
-          setCalculosSalvos(calculos || []);
+          console.log('Cálculos carregados:', calculosResult.data?.length || 0);
+          setCalculosSalvos(calculosResult.data || []);
+        }
+
+        // Exibir onboarding se ainda não foi concluído
+        if (!perfilResult.error && perfilResult.data) {
+          if (!perfilResult.data.onboarding_completo) {
+            setMostrarOnboarding(true);
+          }
         }
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
@@ -53,6 +69,15 @@ export function HomePage() {
 
     carregarDadosReais();
   }, [user]);
+
+  const concluirOnboarding = async () => {
+    setMostrarOnboarding(false);
+    if (!user) return;
+    await supabase
+      .from('profiles')
+      .update({ onboarding_completo: true })
+      .eq('id', user.id);
+  };
 
   // Stats baseadas nos dados reais
   const totalCalculos = calculosSalvos.length;
@@ -87,6 +112,11 @@ export function HomePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <OnboardingModal
+        open={mostrarOnboarding}
+        nomeUsuario={user?.name}
+        onConcluir={concluirOnboarding}
+      />
       <div className="container mx-auto p-6">
         {/* Welcome Section */}
         <div className="mb-8">
