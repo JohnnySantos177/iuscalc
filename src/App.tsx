@@ -14,6 +14,7 @@ import { SuperAdminPanel } from "@/pages/SuperAdminPanel";
 import { RelatoriosPage } from "@/pages/RelatoriosPage";
 import { UpgradePage } from "@/pages/UpgradePage";
 import { ManualPage } from "@/pages/ManualPage";
+import { FeedbackButton } from "@/components/feedback/FeedbackButton";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -26,6 +27,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
+        <FeedbackButton />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<AuthPage />} />

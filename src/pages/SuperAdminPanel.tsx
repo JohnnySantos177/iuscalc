@@ -6,8 +6,9 @@ import { SystemSettings } from '@/components/admin/SystemSettings';
 import { SecurityManagement } from '@/components/admin/SecurityManagement';
 import { AnalyticsDashboard } from '@/components/admin/AnalyticsDashboard';
 import { SystemLogs } from '@/components/admin/SystemLogs';
+import { FeedbacksManagement } from '@/components/admin/FeedbacksManagement';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Users, Settings, Database, Shield, BarChart, ClipboardList } from 'lucide-react';
+import { Users, Settings, Database, Shield, BarChart, ClipboardList, MessageSquare } from 'lucide-react';
 
 export function SuperAdminPanel() {
   const [activeTab, setActiveTab] = useState('users');
@@ -19,7 +20,7 @@ export function SuperAdminPanel() {
       </h1>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-6 mb-8">
+        <TabsList className="grid w-full grid-cols-7 mb-8">
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="w-4 h-4" />
             Usuários
@@ -43,6 +44,10 @@ export function SuperAdminPanel() {
           <TabsTrigger value="logs" className="flex items-center gap-2">
             <ClipboardList className="w-4 h-4" />
             Logs
+          </TabsTrigger>
+          <TabsTrigger value="feedbacks" className="flex items-center gap-2">
+            <MessageSquare className="w-4 h-4" />
+            Feedbacks
           </TabsTrigger>
         </TabsList>
 
@@ -68,6 +73,10 @@ export function SuperAdminPanel() {
 
         <TabsContent value="logs">
           <SystemLogs />
+        </TabsContent>
+
+        <TabsContent value="feedbacks">
+          <FeedbacksManagement />
         </TabsContent>
       </Tabs>
     </div>
