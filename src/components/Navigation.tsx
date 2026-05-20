@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Calculator, User, LogOut, Crown, BarChart2 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
+import { trackUpgradeClicado } from '@/lib/analytics';
 
 export const Navigation = () => {
   const { user, logout } = useAuth();
@@ -49,6 +50,9 @@ export const Navigation = () => {
                 <Link
                   key={item.path}
                   to={item.path}
+                  onClick={() => {
+                    if (item.path === '/upgrade') trackUpgradeClicado('navigation');
+                  }}
                   className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-all ${
                     location.pathname === item.path
                       ? 'bg-juriscalc-blue text-white shadow-md'

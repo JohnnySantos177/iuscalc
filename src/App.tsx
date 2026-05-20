@@ -17,6 +17,7 @@ import { ManualPage } from "@/pages/ManualPage";
 import { TermosPage } from "@/pages/TermosPage";
 import { PrivacidadePage } from "@/pages/PrivacidadePage";
 import { FeedbackButton } from "@/components/feedback/FeedbackButton";
+import { AnalyticsProvider } from "@/components/analytics/AnalyticsProvider";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -29,6 +30,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <AuthProvider>
+        <AnalyticsProvider>
         <FeedbackButton />
         <Routes>
           <Route path="/" element={<Index />} />
@@ -94,6 +96,7 @@ const App = () => (
           <Route path="/index" element={<Index />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        </AnalyticsProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -10,6 +10,7 @@ import { TotalDisplay } from './results/TotalDisplay';
 import { HorasExtrasSection } from './results/HorasExtrasSection';
 import { Badge } from '@/components/ui/badge';
 import { prepararMetadados } from '@/utils/calculosUtils';
+import { trackExportarPDF, trackExportarExcel, trackCompartilharWhatsApp } from '@/lib/analytics';
 import { 
   Receipt, 
   Clock, 
@@ -185,6 +186,7 @@ const handleExportar = () => {
 
       // 2. Executa a função nativa do seu projeto
       exportToPDF(dadosParaExportar);
+      trackExportarPDF();
 
     } catch (error) {
       console.error('Erro ao exportar:', error);
@@ -206,6 +208,7 @@ const handleExportar = () => {
         timestamp: dataCalculo,
         nomeEscritorio,
       });
+      trackExportarExcel();
     } catch (error) {
       console.error('Erro ao exportar Excel:', error);
     }
@@ -221,6 +224,7 @@ const handleExportar = () => {
       );
 
       shareViaWhatsApp(textoCalculo);
+      trackCompartilharWhatsApp();
     } catch (error) {
       console.error('Erro ao compartilhar:', error);
     }

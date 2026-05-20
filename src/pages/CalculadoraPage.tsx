@@ -10,6 +10,7 @@ import { SavedCalculations } from '@/components/calculadora/SavedCalculations';
 import { toast } from 'sonner';
 import { CalculadoraState, DadosContrato } from '@/types/calculadora';
 import { Trash2 } from 'lucide-react';
+import { trackCalcular, trackSalvarCalculo } from '@/lib/analytics';
 
 export function CalculadoraPage() {
   const { state, updateState, resetState } = useCalculadoraState();
@@ -49,6 +50,10 @@ export function CalculadoraPage() {
       const resultados = calcular(stateCopy);
       updateState({ resultados });
       toast.success('Cálculo realizado com sucesso!');
+      trackCalcular({
+        tipo_rescisao: state.dadosContrato.motivoDemissao,
+        salario_base: Number(state.dadosContrato.salarioBase),
+      });
       
     } catch (error) {
       console.error('Erro ao calcular resultados:', error);
@@ -80,6 +85,7 @@ export function CalculadoraPage() {
     };
     
     salvarCalculo(stateWithCalculosPersonalizados, state.resultados, nomePersonalizado || undefined);
+    trackSalvarCalculo();
   };
 
   const handleLimpar = () => {

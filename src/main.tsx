@@ -4,6 +4,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from '@/hooks/useAuth';
 import App from './App';
 import './index.css';
+import { initAnalytics } from '@/lib/analytics';
+
+initAnalytics();
 // import { CompartilharDialog } from "@/components/calculadora/CompartilharDialog";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

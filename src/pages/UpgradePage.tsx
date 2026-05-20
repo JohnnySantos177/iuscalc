@@ -1,6 +1,8 @@
 import { Crown, Check, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { useEffect } from 'react';
+import { trackUpgradePageVisitada, trackAssinaturaIniciada } from '@/lib/analytics';
 
 const planos = [
   {
@@ -61,6 +63,10 @@ const corBotao: Record<string, string> = {
 export function UpgradePage() {
   const { user } = useAuth();
   const isPremium = user?.plan === 'premium';
+
+  useEffect(() => {
+    trackUpgradePageVisitada();
+  }, []);
 
   if (isPremium) {
     return (
@@ -140,7 +146,13 @@ export function UpgradePage() {
                 ))}
               </ul>
 
-              <a href={plano.link} target="_blank" rel="noopener noreferrer" className="block">
+              <a
+                href={plano.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block"
+                onClick={() => trackAssinaturaIniciada(plano.nome)}
+              >
                 <Button
                   className={`w-full ${corBotao[plano.cor]} text-white py-3 font-semibold rounded-lg transition-colors`}
                 >
