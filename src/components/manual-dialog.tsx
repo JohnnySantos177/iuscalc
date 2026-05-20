@@ -36,7 +36,7 @@ export function ManualDialog({ children }: ManualDialogProps) {
                 <h3 className="text-lg font-semibold text-juriscalc-navy mb-2">2. Tela Inicial (Dashboard)</h3>
                 <p>Aqui você encontra um resumo rápido e pode navegar:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Menu:</strong> Acesse Calculadora e Petições no topo.</li>
+                  <li><strong>Menu:</strong> Acesse Calculadora e Relatórios no topo.</li>
                   <li><strong>Resumo:</strong> Veja os campos principais para começar um cálculo.</li>
                 </ul>
               </section>
@@ -70,7 +70,6 @@ export function ManualDialog({ children }: ManualDialogProps) {
                       <li><strong>Salvar:</strong> Guarde o cálculo para usar depois.</li>
                       <li><strong>Compartilhar:</strong> Envie por WhatsApp ou E-mail.</li>
                       <li><strong>Exportar:</strong> Salve como PDF ou Excel.</li>
-                      <li><strong>Gerar Petição:</strong> Crie uma petição com os dados.</li>
                     </ul>
                   </div>
                 </div>

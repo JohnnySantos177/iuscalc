@@ -36,7 +36,7 @@ export function ManualDialog({ children }: ManualDialogProps) {
                 <h3 className="text-lg font-semibold text-juriscalc-navy mb-2">2. Dashboard - Página Inicial</h3>
                 <p>Após o login, você será direcionado para a página principal do sistema. Aqui, você pode:</p>
                 <ul className="list-disc pl-6 space-y-2">
-                  <li><strong>Menu de Navegação:</strong> No topo, utilize os menus Calculadora e Petições para acessar as principais funcionalidades.</li>
+                  <li><strong>Menu de Navegação:</strong> No topo, utilize os menus Calculadora e Relatórios para acessar as principais funcionalidades.</li>
                   <li><strong>Resumo do Cálculo de Verbas Rescisórias:</strong> A tela de cálculo mostra os campos principais, como Data de Admissão, Data de Demissão, Salário Base, Tipo de Rescisão, e outros detalhes essenciais para o cálculo.</li>
                 </ul>
               </section>
@@ -71,10 +71,7 @@ export function ManualDialog({ children }: ManualDialogProps) {
                 </div>
 
                 <p className="mt-4">
-                  Você também pode Salvar o Cálculo, Exportar para diferentes formatos (WhatsApp, E-mail, PDF) ou gerar uma Petição com os dados calculados.
-                </p>
-                <p>
-                  Você pode Imprimir, Editar ou Excluir petições salvas.
+                  Você também pode Salvar o Cálculo, Exportar para diferentes formatos (WhatsApp, E-mail, PDF ou Excel) e reutilizar cálculos salvos a qualquer momento.
                 </p>
               </section>
 
