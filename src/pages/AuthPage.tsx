@@ -154,13 +154,13 @@ export const AuthPage = () => {
         )}
 
         {/* Rodapé legal */}
-        <p className="text-center text-xs text-white/60 mt-6">
+        <p className="text-center text-xs text-white/90 mt-6">
           Ao usar o IusCalc, você concorda com nossos{' '}
-          <Link to="/termos" className="underline hover:text-white transition-colors">
+          <Link to="/termos" className="font-semibold underline hover:text-yellow-300 transition-colors">
             Termos de Uso
           </Link>{' '}
           e nossa{' '}
-          <Link to="/privacidade" className="underline hover:text-white transition-colors">
+          <Link to="/privacidade" className="font-semibold underline hover:text-yellow-300 transition-colors">
             Política de Privacidade
           </Link>.
         </p>
