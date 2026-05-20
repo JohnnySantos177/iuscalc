@@ -2,7 +2,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Calculator, TrendingUp, FileText, Clock, Award } from "lucide-react";
+import { Calculator, TrendingUp, FileText, Clock, Award, BookOpen } from "lucide-react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { formatCurrency } from "@/utils/format";
@@ -149,6 +149,12 @@ export function HomePage() {
                   <Link to="/relatorios">
                     <TrendingUp className="w-4 h-4 mr-2" />
                     Relatórios
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="w-full justify-start">
+                  <Link to="/manual">
+                    <BookOpen className="w-4 h-4 mr-2" />
+                    Manual do Usuário
                   </Link>
                 </Button>
               </CardContent>

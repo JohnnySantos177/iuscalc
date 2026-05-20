@@ -13,6 +13,7 @@ import { MinhaContaPage } from "@/pages/MinhaContaPage";
 import { SuperAdminPanel } from "@/pages/SuperAdminPanel";
 import { RelatoriosPage } from "@/pages/RelatoriosPage";
 import { UpgradePage } from "@/pages/UpgradePage";
+import { ManualPage } from "@/pages/ManualPage";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import './App.css';
@@ -80,6 +81,15 @@ const App = () => (
               <ProtectedRoute skipTrialCheck>
                 <Navigation />
                 <UpgradePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/manual"
+            element={
+              <ProtectedRoute skipTrialCheck>
+                <Navigation />
+                <ManualPage />
               </ProtectedRoute>
             }
           />
