@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   BookOpen, LogIn, Calculator, FileText, BarChart2,
   User, Crown, ChevronRight, Download, Share2, Save,
@@ -397,10 +397,10 @@ function Planos() {
 
       <div className="bg-gray-50 rounded-xl p-5">
         <p className="font-semibold text-gray-900 mb-3">Como assinar</p>
-        <Step number={1} title="Clique em "Seja Premium" na barra de navegação">
+        <Step number={1} title='Clique em "Seja Premium" na barra de navegação'>
           Você verá os planos disponíveis: Mensal, Trimestral e Semestral.
         </Step>
-        <Step number={2} title="Escolha o plano e clique em "Assinar Agora"">
+        <Step number={2} title='Escolha o plano e clique em "Assinar Agora"'>
           Você será redirecionado para a Hotmart, plataforma segura de pagamento.
         </Step>
         <Step number={3} title="Após a confirmação do pagamento">
