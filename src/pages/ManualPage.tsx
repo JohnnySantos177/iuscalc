@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import {
   BookOpen, LogIn, Calculator, FileText, BarChart2,
   User, Crown, ChevronRight, Download, Share2, Save,
-  AlertCircle, CheckCircle, Clock, Briefcase
+  AlertCircle, CheckCircle, Clock, Briefcase, ArrowLeft
 } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { Navigation } from '@/components/Navigation';
+import { useNavigate } from 'react-router-dom';
 
 interface Section {
   id: string;
@@ -430,13 +433,31 @@ const contentMap: Record<string, React.ReactNode> = {
 
 export function ManualPage() {
   const [activeSection, setActiveSection] = useState('primeiros-passos');
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  const handleVoltar = () => {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate(user ? '/home' : '/auth');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {user && <Navigation />}
       <div className="container mx-auto px-4 py-8 max-w-5xl">
 
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
+          <button
+            onClick={handleVoltar}
+            className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-juriscalc-blue transition-colors mr-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Voltar
+          </button>
           <div className="bg-juriscalc-blue text-white rounded-xl p-2.5">
             <BookOpen className="w-6 h-6" />
           </div>
