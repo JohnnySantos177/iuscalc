@@ -23,12 +23,16 @@ export const Navigation = () => {
     navItems.push({ path: '/admin', label: 'Admin', icon: Crown });
   }
 
-  const isPremium = user?.tipo_plano === 'premium';
-  const isSuperAdmin = user?.role === 'super_admin' || user?.tipo_usuario === 'admin_mestre';
+  const isPremium = user?.plan === 'premium';
+  const isSuperAdmin = user?.role === 'super_admin';
 
-  // Exibir botão de Upgrade apenas para quem não é Premium/Admin
-  if (!isPremium && !isSuperAdmin) {
-    navItems.push({ path: '/upgrade', label: 'Seja Premium', icon: Crown });
+  // Super admin não precisa ver aba de plano
+  if (!isSuperAdmin) {
+    navItems.push({
+      path: '/upgrade',
+      label: isPremium ? 'Gerenciar Plano' : 'Seja Premium',
+      icon: Crown,
+    });
   }
 
   return (

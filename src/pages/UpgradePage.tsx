@@ -1,5 +1,6 @@
-import { Crown, Check } from 'lucide-react';
+import { Crown, Check, BadgeCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
 
 const planos = [
   {
@@ -58,6 +59,28 @@ const corBotao: Record<string, string> = {
 };
 
 export function UpgradePage() {
+  const { user } = useAuth();
+  const isPremium = user?.plan === 'premium';
+
+  if (isPremium) {
+    return (
+      <div className="min-h-screen bg-blue-50 py-16 px-4">
+        <div className="max-w-lg mx-auto text-center">
+          <div className="bg-white rounded-2xl shadow-lg p-10">
+            <BadgeCheck className="w-16 h-16 text-green-500 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Você já é Premium!</h1>
+            <p className="text-gray-600 mb-6">
+              Sua assinatura está ativa e você tem acesso completo a todos os recursos do IusCalc.
+            </p>
+            <p className="text-sm text-gray-500">
+              Para gerenciar ou cancelar sua assinatura, acesse diretamente a plataforma Hotmart onde realizou a compra.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-blue-50 py-16 px-4">
       <div className="max-w-4xl mx-auto">
@@ -136,3 +159,4 @@ export function UpgradePage() {
     </div>
   );
 }
+
