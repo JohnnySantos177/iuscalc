@@ -86,12 +86,7 @@ const App = () => (
           />
           <Route
             path="/manual"
-            element={
-              <ProtectedRoute skipTrialCheck>
-                <Navigation />
-                <ManualPage />
-              </ProtectedRoute>
-            }
+            element={<ManualPage />}
           />
           <Route path="/index" element={<Index />} />
           <Route path="*" element={<NotFound />} />

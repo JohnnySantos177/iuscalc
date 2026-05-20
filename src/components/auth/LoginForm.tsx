@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff, MessageCircle, Mail, FileText, Table2 } from 'lucide-react';
-import { ManualDialog } from '@/components/manual-dialog';
+import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
@@ -240,11 +240,12 @@ export function LoginForm() {
 
             {/* Manual Link */}
             <div className="mt-3 flex justify-center">
-              <ManualDialog>
-                <button type="button" className="text-xs text-gray-600 hover:text-gray-800 flex items-center gap-2 transition-colors">
-                  <span>📖</span> Manual Rápido IusCalc
-                </button>
-              </ManualDialog>
+              <Link
+                to="/manual"
+                className="text-xs text-gray-600 hover:text-gray-800 flex items-center gap-2 transition-colors"
+              >
+                <span>📖</span> Manual Rápido IusCalc
+              </Link>
             </div>
           </>
         )}
