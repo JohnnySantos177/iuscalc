@@ -223,7 +223,7 @@ export function HomePage() {
                     Upgrade para Premium
                   </h3>
                   <p className="text-white/90">
-                    Desbloqueie recursos avançados e tenha cálculos ilimitados
+                    Continue usando após o trial e tenha acesso completo ao sistema
                   </p>
                 </div>
                 <a href="/upgrade">

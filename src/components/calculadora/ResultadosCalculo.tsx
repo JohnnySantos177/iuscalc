@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Resultados, DadosContrato } from '@/types/calculadora';
 import { exportToPDF } from '@/utils/export/pdfExport';
+import { exportToExcel } from '@/utils/export/excelExport';
 import { shareViaWhatsApp, generateCalculationText } from '@/utils/export/shareUtils';
 import { formatCurrency } from '@/utils/format';
 import { ResultsActions } from './results/ResultsActions';
@@ -190,6 +191,26 @@ const handleExportar = () => {
     }
   };
 
+  const handleExportarExcel = () => {
+    try {
+      const { dataCalculo, nomeEscritorio } = prepararMetadados();
+      exportToExcel({
+        verbasRescisorias: detalhamento.verbas,
+        adicionais: {
+          ...detalhamento.adicionais,
+          ...detalhamento.multas,
+          seguroDesemprego: detalhamento.seguroDesemprego,
+          salarioFamilia: detalhamento.salarioFamilia,
+        },
+        totalGeral: total,
+        timestamp: dataCalculo,
+        nomeEscritorio,
+      });
+    } catch (error) {
+      console.error('Erro ao exportar Excel:', error);
+    }
+  };
+
   const handleCompartilhar = () => {
     try {
       const { dataCalculo, nomeEscritorio } = prepararMetadados();
@@ -233,6 +254,7 @@ const handleExportar = () => {
           <ResultsActions
             onSalvar={onSalvar}
             onExportar={handleExportar}
+            onExportarExcel={handleExportarExcel}
             onCompartilhar={handleCompartilhar}
           />
         </CardTitle>
